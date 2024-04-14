@@ -37,18 +37,6 @@ templates = Jinja2Templates(directory="templates")
 
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
-
-@app.get("/api_data/{path_var}")
-async def api_data(request: Request, path_var: str):
-    print("path_var:", path_var)
-    return path_var
-
-
-@app.get("/api_template/{path_var}")
-async def api_template(request: Request, path_var: str):
-    print("path_var:", path_var)
-    return templates.TemplateResponse('for_api/' + path_var + '.template', {"request": request})
-
 def process_command(command):
     state = { "command_len": len(command) }
     if command == "":
@@ -56,15 +44,15 @@ def process_command(command):
     state['command'] = command.upper()
     return state
 
-@app.get("/command")
+@app.get("/index")
 async def command(request: Request):
-    return templates.TemplateResponse('for_command/command.html', {"request": request, "map": map, "state": {}})
+    return templates.TemplateResponse('game/index.html', {"request": request, "map": map, "state": {}})
 
 
-@app.post("/command")
+@app.post("/index")
 async def command(request: Request, command: str = Form(default = "")):
     state = process_command(command)
-    return templates.TemplateResponse('for_command/command.html', {"request": request, "map": map, "state": state})
+    return templates.TemplateResponse('game/index.html', {"request": request, "map": map, "state": state})
 
 
 @app.get("/")

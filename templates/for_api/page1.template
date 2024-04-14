@@ -1,8 +1,0 @@
-<h1>templates/for_api/page1.template</h1>
-
-{{ request.url.path }}<br/>
-{{ request.query_params }}<br/>
-{{ request.path_params }}<br/>
-{{ request.client.host }}<br/>
-<br/>
-<a href="https://www.starlette.io/requests/">Documentation</a>
