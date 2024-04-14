@@ -7,12 +7,15 @@ import json
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Request, Response, UploadFile, File, HTTPException
+from fastapi import FastAPI, Request, Response, UploadFile, File, HTTPException, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.responses import HTMLResponse
+
+
+map = [["1","2","3"],["4","5","6"],["7","8","9"]]
 
 
 # Get the directory of the current Python script
@@ -45,6 +48,23 @@ async def api_data(request: Request, path_var: str):
 async def api_template(request: Request, path_var: str):
     print("path_var:", path_var)
     return templates.TemplateResponse('for_api/' + path_var + '.template', {"request": request})
+
+def process_command(command):
+    state = { "command_len": len(command) }
+    if command == "":
+        state['error_msg'] = "Please enter a command"
+    state['command'] = command.upper()
+    return state
+
+@app.get("/command")
+async def command(request: Request):
+    return templates.TemplateResponse('for_command/command.html', {"request": request, "map": map, "state": {}})
+
+
+@app.post("/command")
+async def command(request: Request, command: str = Form(default = "")):
+    state = process_command(command)
+    return templates.TemplateResponse('for_command/command.html', {"request": request, "map": map, "state": state})
 
 
 @app.get("/")
@@ -92,4 +112,4 @@ async def handle_request(path:str, request: Request):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, port=8000)

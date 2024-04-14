@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Form</title>
+  <style>
+    .block {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      border: 1px solid black;
+    }
+     .error {
+            border: 2px solid red;
+            padding: 5px;
+            display: inline-block;
+        }
+        .error-icon {
+            color: red;
+            margin-right: 5px;
+        }
+
+  </style>
+</head>
+<body>
+    <h2>Request Data</h2>
+    <ul>
+        {% for key in state %}
+        <li><strong>{{ key }}</strong>: {{ state[key] }}</li>
+        {% endfor %}
+    </ul>
+
+
+  {% for row in map %}
+    {% for item in row %}
+      <div class="block">{{ item }}</div>
+    {% endfor %}
+    <br>
+  {% endfor %}
+
+    {% if state.error_msg %}
+        <div class="error">
+            <span class="error-icon">&#9888;</span>{{ state.error_msg }}
+        </div>
+        <br><br>
+    {% endif %}
+
+    <h2>Send Command</h2>
+    <form action="/command" method="POST">
+        <label for="command">Enter command:</label><br>
+        <input type="text" id="command" name="command"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
