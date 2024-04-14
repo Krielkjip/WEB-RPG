@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Command Form</title>
+    <title>Game</title>
   <style>
     .block {
       width: 20px;
@@ -32,12 +32,17 @@
     </ul>
 
 
-  {% for row in map %}
-    {% for item in row %}
-      <div class="block">{{ item }}</div>
+  {% if map is none %}
+    <p>Map is null</p>
+  {% else %}
+    {% for row in map %}
+      {% for item in row %}
+        <div class="block">{{ item }}</div>
+      {% endfor %}
+      <br>
     {% endfor %}
-    <br>
-  {% endfor %}
+  {% endif %}
+
 
     {% if state.error_msg %}
         <div class="error">
