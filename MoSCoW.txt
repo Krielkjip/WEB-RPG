@@ -1,0 +1,28 @@
+Must Have
+- world map rendering
+- player movement
+- crafting
+- death logic
+- building
+- mining
+
+Should Have
+- random world gen
+- boss
+- explanation screen
+- fishing
+- trading
+
+- data storing (SqL)
+- player login/account
+
+Could Have
+- playtime timer (leaderboard)
+- day/night cycle
+- weather
+- quests
+
+Won't Have (this time)
+- multiplayer
+- voice input
+- global trading
