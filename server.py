@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.responses import HTMLResponse
 
-
+player_location = [0, 0]
 map = run_world_gen(16,16)
 print(map)
 # map = None
@@ -44,8 +44,23 @@ def process_command(command):
     state = { "command_len": len(command) }
     if command == "":
         state['error_msg'] = "Please enter a command"
-    state['command'] = command.upper()
+    state['command'] = command
     return state
+
+def move_player(move):
+    if move == "Down":
+        print("Moving down")
+        player_location[1] += 1
+    elif move == "Up":
+        print("Moving up")
+        player_location[1] -= 1
+    elif move == "Right":
+        print("Moving right")
+        player_location[0] += 1
+    elif move == "Left":
+        print("Moving left")
+        player_location[0] -= 1
+
 
 @app.get("/index")
 async def command(request: Request):
@@ -53,9 +68,17 @@ async def command(request: Request):
 
 
 @app.post("/index")
-async def command(request: Request, command: str = Form(default = "")):
-    state = process_command(command)
-    return templates.TemplateResponse('game/index.html', {"request": request, "map": map, "state": state})
+async def command(request: Request, command: str = Form(default = ""), move: str = Form(default = "")):
+    print(command)
+    move_player(move)
+    state = ""
+    if move == "":
+        state = process_command(command)
+    return templates.TemplateResponse('game/index.html', {"request": request, "player_location": player_location, "map": map, "state": state})
+
+@app.post("/")
+async def move(request: Request,):
+    return templates.TemplateResponse('game/index.html', {"request": request, "state": {}})
 
 
 @app.get("/")

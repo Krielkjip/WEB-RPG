@@ -90,6 +90,16 @@
         <input type="text" id="command" name="command"><br><br>
         <input type="submit" value="Submit">
     </form>
+    <H2>Contols</H2>
+    <form action="/index" method="POST">
+        <input type="submit" name="move" value="Down">
+        <input type="submit" name="move" value="Up">
+        <input type="submit" name="move" value="Left">
+        <input type="submit" name="move" value="Right">
+    </form>
+    <br>
+    {{ player_location }}
+    <br>
     <a href="/">Home</a>
 </body>
 </html>
