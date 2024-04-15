@@ -61,10 +61,9 @@ def move_player(move):
         print("Moving left")
         player_location[0] -= 1
 
-
 @app.get("/index")
 async def command(request: Request):
-    return templates.TemplateResponse('game/index.html', {"request": request, "map": map, "state": {}})
+    return templates.TemplateResponse('game/index.j2', {"request": request, "map": map, "state": {}})
 
 
 @app.post("/index")
@@ -74,21 +73,21 @@ async def command(request: Request, command: str = Form(default = ""), move: str
     state = ""
     if move == "":
         state = process_command(command)
-    return templates.TemplateResponse('game/index.html', {"request": request, "player_location": player_location, "map": map, "state": state})
+    return templates.TemplateResponse('game/index.j2', {"request": request, "player_location": player_location, "map": map, "state": state})
 
 @app.post("/")
 async def move(request: Request,):
-    return templates.TemplateResponse('game/index.html', {"request": request, "state": {}})
+    return templates.TemplateResponse('game/index.j2', {"request": request, "state": {}})
 
 
 @app.get("/")
 async def root(request: Request):
     """
-    Handle initial landing page with nothing on the url, render index.html
+    Handle initial landing page with nothing on the url, render index.j2
     :param request: request from client
-    :return: rendered index.html
+    :return: rendered index.j2
     """
-    return await handle_request('index.html', request)
+    return await handle_request('index.j2', request)
 
 
 @app.get("/{path:path}")
@@ -111,11 +110,11 @@ async def handle_request(path:str, request: Request):
             # We got an exact match
             return templates.TemplateResponse(path, {"request": request})
         else:
-            # It is a folder, check for index.html in this folder
-            path = path + '/index.html'
+            # It is a folder, check for index.j2 in this folder
+            path = path + '/index.j2'
             template_file = current_dir / "templates" / path
             if template_file.exists() and template_file.is_file():
-                # We got an index.html
+                # We got an index.j2
                 return templates.TemplateResponse(path, {"request": request})
     # No template, check for static
     static_file = current_dir / "statics" / path
