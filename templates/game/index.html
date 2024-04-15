@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
   <style>
+      body {
+            color: white;
+        }
     .block {
-      width: 20px;
-      height: 20px;
+      width: 50px;
+      height: 50px;
       display: inline-block;
       border: 1px solid black;
     }
@@ -23,7 +26,7 @@
 
   </style>
 </head>
-<body>
+<body style="background-color: #0d183a;">
     <h2>Request Data</h2>
     <ul>
         {% for key in state %}
@@ -32,16 +35,46 @@
     </ul>
 
 
-  {% if map is none %}
+{% if map is none %}
     <p>Map is null</p>
-  {% else %}
+{% else %}
+    {% set type_map = {'Taiga': {'char': 'T', 'color': 'white'},
+                      'Rainforest': {'char': 'R', 'color': 'forestgreen'},
+                      'Grassland': {'char': 'G', 'color': 'lightgreen'},
+                      'Mountain': {'char': 'M', 'color': 'gray'},
+                      'Forest': {'char': 'F', 'color': 'darkgreen'},
+                      'Volcano': {'char': 'V', 'color': 'red'},
+                      'Desert': {'char': 'D', 'color': 'sandybrown'},
+                      'Ocean': {'char': 'O', 'color': 'dodgerblue'},
+                      'Temperate Forest': {'char': 'W', 'color': 'olivedrab'},
+                      'Tundra': {'char': 'A', 'color': 'lightgray'},
+                      'Taiga Forest': {'char': 'F', 'color': 'white'},
+                      'Savanna': {'char': 'S', 'color': 'khaki'}} %}
+
+    <style>
+    .grid-item {
+        padding: 5px; /* Adjust padding as needed */
+        font-weight: bold;
+        border: 2px solid black; /* Add border for table cells */
+        text-align: center; /* Center align content */
+    }
+        table {
+        border-collapse: collapse; /* Collapse table borders */
+    }
+    </style>
+
+    <table>
     {% for row in map %}
-      {% for item in row %}
-        <div class="block">{{ item }}</div>
-      {% endfor %}
-      <br>
+        <tr>
+        {% for item in row %}
+            {% set type_info = type_map[item] %}
+            <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+        {% endfor %}
+        </tr>
     {% endfor %}
-  {% endif %}
+    </table>
+{% endif %}
+
 
 
     {% if state.error_msg %}

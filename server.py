@@ -5,6 +5,7 @@ import tempfile
 from typing import Annotated
 import json
 from pathlib import Path
+from world_map_gen import run_world_gen
 
 import uvicorn
 from fastapi import FastAPI, Request, Response, UploadFile, File, HTTPException, Form
@@ -15,7 +16,8 @@ from fastapi.responses import StreamingResponse
 from starlette.responses import HTMLResponse
 
 
-map = [["1","2","3","4"],["5","6","7","8"],["9","10","11","12"],["13","14","15","16"]]
+map = run_world_gen(16,16)
+print(map)
 # map = None
 
 
