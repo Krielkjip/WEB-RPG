@@ -63,7 +63,7 @@ def move_player(move):
 
 @app.get("/index")
 async def command(request: Request):
-    return templates.TemplateResponse('game/index.j2', {"request": request, "map": map, "state": {}})
+    return templates.TemplateResponse('game/index.j2', {"request": request, "player_location": player_location, "map": map, "state": {}})
 
 
 @app.post("/index")

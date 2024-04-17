@@ -64,11 +64,16 @@
     </style>
 
     <table>
-    {% for row in map %}
+    {% for y in range(16) %}
         <tr>
-        {% for item in row %}
+        {% for x in range(16) %}
+            {% set item = map[x][y] %}
             {% set type_info = type_map[item] %}
-            <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+            {% if player_location[0] == x and player_location[1] == y %}
+                <td class="grid-item" style="color: yellow">X</td>
+            {% else %}
+                <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+            {% endif %}
         {% endfor %}
         </tr>
     {% endfor %}
@@ -92,10 +97,10 @@
     </form>
     <H2>Contols</H2>
     <form action="/index" method="POST">
-        <input type="submit" name="move" value="Down">
-        <input type="submit" name="move" value="Up">
-        <input type="submit" name="move" value="Left">
-        <input type="submit" name="move" value="Right">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="move" value="Up">↑</button><br>
+        <button type="submit" name="move" value="Left">←</button>
+        <button type="submit" name="move" value="Right">→</button><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="move" value="Down">↓</button>
     </form>
     <br>
     {{ player_location }}
