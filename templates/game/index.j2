@@ -62,11 +62,11 @@
         border-collapse: collapse; /* Collapse table borders */
     }
     </style>
-
+    {% set map_size = map|length %}
     <table>
-    {% for y in range(16) %}
+    {% for y in range(map_size) %}
         <tr>
-        {% for x in range(16) %}
+        {% for x in range(map_size) %}
             {% set item = map[x][y] %}
             {% set type_info = type_map[item] %}
             {% if player_location[0] == x and player_location[1] == y %}
@@ -97,10 +97,10 @@
     </form>
     <H2>Contols</H2>
     <form action="/index" method="POST">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="move" value="Up">↑</button><br>
-        <button type="submit" name="move" value="Left">←</button>
-        <button type="submit" name="move" value="Right">→</button><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="move" value="Down">↓</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Up">↑</button><br>
+        <button type="submit" name="command" value="Left">←</button>
+        <button type="submit" name="command" value="Right">→</button><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Down">↓</button>
     </form>
     <br>
     {{ player_location }}

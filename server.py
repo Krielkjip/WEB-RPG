@@ -15,8 +15,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.responses import HTMLResponse
 
+
+map_size = 16
 player_location = [0, 0]
-map = run_world_gen(16,16)
+map = run_world_gen(map_size, map_size)
 print(map)
 # map = None
 
@@ -41,25 +43,31 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
 def process_command(command):
+    move_player(command.lower())
     state = { "command_len": len(command) }
     if command == "":
         state['error_msg'] = "Please enter a command"
     state['command'] = command
+    print(state)
     return state
 
 def move_player(move):
-    if move == "Down":
+    if move == "down":
         print("Moving down")
-        player_location[1] += 1
-    elif move == "Up":
+        if player_location[1] < map_size - 1:
+            player_location[1] += 1
+    elif move == "up":
         print("Moving up")
-        player_location[1] -= 1
-    elif move == "Right":
+        if player_location[1] > 0:
+            player_location[1] -= 1
+    elif move == "right":
         print("Moving right")
-        player_location[0] += 1
-    elif move == "Left":
+        if player_location[0] < map_size - 1:
+            player_location[0] += 1
+    elif move == "left":
         print("Moving left")
-        player_location[0] -= 1
+        if player_location[0] > 0:
+            player_location[0] -= 1
 
 @app.get("/index")
 async def command(request: Request):
@@ -69,10 +77,7 @@ async def command(request: Request):
 @app.post("/index")
 async def command(request: Request, command: str = Form(default = ""), move: str = Form(default = "")):
     print(command)
-    move_player(move)
-    state = ""
-    if move == "":
-        state = process_command(command)
+    state = process_command(command)
     return templates.TemplateResponse('game/index.j2', {"request": request, "player_location": player_location, "map": map, "state": state})
 
 @app.post("/")
