@@ -17,7 +17,7 @@ from starlette.responses import HTMLResponse
 
 
 map_size = 16
-player_location = [0, 0]
+player_state = [0, 0]
 map = run_world_gen(map_size, map_size)
 print(map)
 # map = None
@@ -42,43 +42,63 @@ templates = Jinja2Templates(directory="templates")
 
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
-def process_command(command):
+def save_game(map, player_state):
+    with open('save_data/map_data.json', 'w') as json_file:
+        json.dump([map, player_state], json_file)
+        print("SAVED DATA")
+
+def load_game():
+    with open('save_data/map_data.json', 'r') as json_file:
+        data = json.load(json_file)
+        map = data[0]
+        player_state = data[1]
+        return map, player_state
+
+def process_command(command, map, player_state):
+    if command.lower() == "save":
+        save_game(map, player_state)
+        print("Saving")
+    elif command.lower() == "load":
+        map, player_state = load_game()
+        print("Loading")
     move_player(command.lower())
     state = { "command_len": len(command) }
     if command == "":
         state['error_msg'] = "Please enter a command"
     state['command'] = command
     print(state)
-    return state
+    return state, map, player_state
 
 def move_player(move):
     if move == "down":
         print("Moving down")
-        if player_location[1] < map_size - 1:
-            player_location[1] += 1
+        if player_state[1] < map_size - 1:
+            player_state[1] += 1
     elif move == "up":
         print("Moving up")
-        if player_location[1] > 0:
-            player_location[1] -= 1
+        if player_state[1] > 0:
+            player_state[1] -= 1
     elif move == "right":
         print("Moving right")
-        if player_location[0] < map_size - 1:
-            player_location[0] += 1
+        if player_state[0] < map_size - 1:
+            player_state[0] += 1
     elif move == "left":
         print("Moving left")
-        if player_location[0] > 0:
-            player_location[0] -= 1
+        if player_state[0] > 0:
+            player_state[0] -= 1
 
 @app.get("/index")
 async def command(request: Request):
-    return templates.TemplateResponse('game/index.j2', {"request": request, "player_location": player_location, "map": map, "state": {}})
+    return templates.TemplateResponse('game/index.j2', {"request": request, "player_state": player_state, "map": map, "state": {}})
 
 
 @app.post("/index")
-async def command(request: Request, command: str = Form(default = ""), move: str = Form(default = "")):
+async def command(request: Request, command: str = Form(default = "")):
+    global player_state
+    global map
     print(command)
-    state = process_command(command)
-    return templates.TemplateResponse('game/index.j2', {"request": request, "player_location": player_location, "map": map, "state": state})
+    state, map, player_state = process_command(command, map, player_state)
+    return templates.TemplateResponse('game/index.j2', {"request": request, "player_state": player_state, "map": map, "state": state})
 
 @app.post("/")
 async def move(request: Request,):

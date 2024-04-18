@@ -69,7 +69,7 @@
         {% for x in range(map_size) %}
             {% set item = map[x][y] %}
             {% set type_info = type_map[item] %}
-            {% if player_location[0] == x and player_location[1] == y %}
+            {% if player_state[0] == x and player_state[1] == y %}
                 <td class="grid-item" style="color: yellow">X</td>
             {% else %}
                 <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
@@ -95,7 +95,7 @@
         <input type="text" id="command" name="command" autofocus><br><br>
         <input type="submit" value="Submit">
     </form>
-    <H2>Contols</H2>
+    <H2>Controls</H2>
     <form action="/index" method="POST">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Up">↑</button><br>
         <button type="submit" name="command" value="Left">←</button>
