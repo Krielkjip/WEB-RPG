@@ -4,35 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
-  <style>
-      body {
+    <style>
+        body {
             color: white;
         }
-    .block {
-      width: 50px;
-      height: 50px;
-      display: inline-block;
-      border: 1px solid black;
-    }
-     .error {
+
+        .block {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            border: 1px solid black;
+        }
+
+        .error {
             border: 2px solid red;
             padding: 5px;
             display: inline-block;
         }
+
         .error-icon {
             color: red;
             margin-right: 5px;
         }
 
-  </style>
+
+    </style>
 </head>
 <body style="background-color: #0d183a;">
-    <h2>Request Data</h2>
-    <ul>
-        {% for key in state %}
+<h2>Request Data</h2>
+<ul>
+    {% for key in state %}
         <li><strong>{{ key }}</strong>: {{ state[key] }}</li>
-        {% endfor %}
-    </ul>
+    {% endfor %}
+</ul>
 
 
 {% if map is none %}
@@ -52,59 +56,75 @@
                       'Savanna': {'char': 'S', 'color': 'khaki'}} %}
 
     <style>
-    .grid-item {
-        padding: 5px; /* Adjust padding as needed */
-        font-weight: bold;
-        border: 2px solid black; /* Add border for table cells */
-        text-align: center; /* Center align content */
-    }
+        .grid-item {
+            width: 15px;
+            height: 15px;
+            padding: 5px; /* Adjust padding as needed */
+            font-weight: bold;
+            border: 2px solid black; /* Add border for table cells */
+            text-align: center; /* Center align content */
+        }
+
+        .player {
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 3px solid yellow;
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+        }
+
         table {
-        border-collapse: collapse; /* Collapse table borders */
-    }
+            border-collapse: collapse; /* Collapse table borders */
+        }
     </style>
     {% set map_size = map|length %}
     <table>
-    {% for y in range(map_size) %}
-        <tr>
-        {% for x in range(map_size) %}
-            {% set item = map[x][y] %}
-            {% set type_info = type_map[item] %}
-            {% if player_state[0] == x and player_state[1] == y %}
-                <td class="grid-item" style="color: yellow">X</td>
-            {% else %}
-                <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
-            {% endif %}
+        {% for y in range(map_size) %}
+            <tr>
+                {% for x in range(map_size) %}
+                    {% set item = map[x][y] %}
+                    {% set type_info = type_map[item] %}
+                    {% if player_state[0] == x and player_state[1] == y %}
+                        {#                <td class="grid-item player" style="color: yellow">X</td>#}
+                        <td class="player" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                    {% else %}
+                        <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
         {% endfor %}
-        </tr>
-    {% endfor %}
     </table>
 {% endif %}
 
 
 
-    {% if state.error_msg %}
-        <div class="error">
-            <span class="error-icon">&#9888;</span>{{ state.error_msg }}
-        </div>
-        <br><br>
-    {% endif %}
+{% if state.error_msg %}
+    <div class="error">
+        <span class="error-icon">&#9888;</span>{{ state.error_msg }}
+    </div>
+    <br><br>
+{% endif %}
 
-    <h2>Send Command</h2>
-    <form action="/index" method="POST">
-        <label for="command">Enter command:</label><br>
-        <input type="text" id="command" name="command" autofocus><br><br>
-        <input type="submit" value="Submit">
-    </form>
-    <H2>Controls</H2>
-    <form action="/index" method="POST">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Up">↑</button><br>
-        <button type="submit" name="command" value="Left">←</button>
-        <button type="submit" name="command" value="Right">→</button><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Down">↓</button>
-    </form>
+<h2>Send Command</h2>
+<form action="/index" method="POST">
+    <label for="command">Enter command:</label><br>
+    <input type="text" id="command" name="command" autofocus><br><br>
+    <input type="submit" value="Submit">
+</form>
+<H2>Controls</H2>
+<form action="/index" method="POST">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Up">↑</button>
     <br>
-    {{ player_location }}
+    <button type="submit" name="command" value="Left">←</button>
+    <button type="submit" name="command" value="Right">→</button>
     <br>
-    <a href="/">Home</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Down">↓</button>
+</form>
+<br>
+{{ player_location }}
+<br>
+<a href="/">Home</a>
 </body>
 </html>
