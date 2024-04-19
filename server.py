@@ -42,24 +42,26 @@ templates = Jinja2Templates(directory="templates")
 
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
-def save_game(map, player_state):
-    with open('save_data/map_data.json', 'w') as json_file:
+def save_game(command, map, player_state):
+    file_location = "save_data/" + command[5:] + ".json"
+    with open(file_location, 'w') as json_file:
         json.dump([map, player_state], json_file)
         print("SAVED DATA")
 
-def load_game():
-    with open('save_data/map_data.json', 'r') as json_file:
+def load_game(command):
+    file_location = "save_data/" + command[5:]
+    with open(file_location, 'r') as json_file:
         data = json.load(json_file)
         map = data[0]
         player_state = data[1]
         return map, player_state
 
 def process_command(command, map, player_state):
-    if command.lower() == "save":
-        save_game(map, player_state)
+    if command[:4].lower() == "save":
+        save_game(command, map, player_state)
         print("Saving")
-    elif command.lower() == "load":
-        map, player_state = load_game()
+    elif command[:4].lower() == "load":
+        map, player_state = load_game(command)
         print("Loading")
     move_player(command.lower())
     state = { "command_len": len(command) }
@@ -88,8 +90,12 @@ def move_player(move):
             player_state[0] -= 1
 
 @app.get("/index")
-async def command(request: Request):
-    return templates.TemplateResponse('game/index.j2', {"request": request, "player_state": player_state, "map": map, "state": {}})
+async def command(request: Request, command: str):
+    global player_state
+    global map
+    print(command)
+    state, map, player_state = process_command(command, map, player_state)
+    return templates.TemplateResponse('game/game.j2', {"request": request, "player_state": player_state, "map": map, "state": {}})
 
 
 @app.post("/index")
@@ -98,11 +104,11 @@ async def command(request: Request, command: str = Form(default = "")):
     global map
     print(command)
     state, map, player_state = process_command(command, map, player_state)
-    return templates.TemplateResponse('game/index.j2', {"request": request, "player_state": player_state, "map": map, "state": state})
+    return templates.TemplateResponse('game/game.j2', {"request": request, "player_state": player_state, "map": map, "state": state})
 
 @app.post("/")
 async def move(request: Request,):
-    return templates.TemplateResponse('game/index.j2', {"request": request, "state": {}})
+    return templates.TemplateResponse('game/game.j2', {"request": request, "state": {}})
 
 
 @app.get("/")
@@ -112,7 +118,9 @@ async def root(request: Request):
     :param request: request from client
     :return: rendered index.j2
     """
-    return await handle_request('index.j2', request)
+    folder_path = 'save_data'
+    items = os.listdir(folder_path)
+    return templates.TemplateResponse("index.j2", {"request": request, "items": items})
 
 
 @app.get("/{path:path}")
