@@ -1,19 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Home</title>
+    <style>
+        body {
+            color: white;
+        }
+    </style>
 </head>
-<body>
-    <h1>Home, landing page</h1>
-    <a href="/index">Game</a><br/>
-    <br/>
-    <ul>
-{#        {{ items }}#}
-        {% for item in items %}
-            <li><a href ="/index?command=load {{ item }}">{{ item[:-5] }}</a></li>
-{#            <li>{{ item }}</li>#}
-        {% endfor %}
-    </ul>
-    <img src="/statics/krielkjip.png" alt="KrielKjip"/>
+<body style="background-color: #0d183a;">
+<h1>Home, landing page</h1>
+<a href="/index?command=load fresh">New Game</a><br/>
+{#    <a href="/interact">interact Menu</a><br/>#}
+
+<br/>
+<h2>Save files:</h2>
+<ul>
+    {#        {{ items }}#}
+    {% for item in items %}
+        <li><a href="/index?command=load {{ item }}">{{ item[:-5] }}</a></li>
+        {#            <li>{{ item }}</li>#}
+    {% endfor %}
+</ul>
+<img src="/statics/krielkjip.png" alt="KrielKjip"/>
 </body>
 </html>

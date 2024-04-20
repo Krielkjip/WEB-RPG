@@ -15,17 +15,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.responses import HTMLResponse
 
-
 map_size = 16
 player_state = [0, 0]
-map = run_world_gen(map_size, map_size)
-print(map)
-# map = None
-
+map = []
 
 # Get the directory of the current Python script
 current_dir = Path(__file__).resolve().parent
-
 
 app = FastAPI()
 origins = ["*"]
@@ -42,34 +37,45 @@ templates = Jinja2Templates(directory="templates")
 
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
+
 def save_game(command, map, player_state):
     file_location = "save_data/" + command[5:] + ".json"
     with open(file_location, 'w') as json_file:
         json.dump([map, player_state], json_file)
         print("SAVED DATA")
 
-def load_game(command):
-    file_location = "save_data/" + command[5:]
-    with open(file_location, 'r') as json_file:
-        data = json.load(json_file)
-        map = data[0]
-        player_state = data[1]
+
+def load_game(command, map, player_state):
+    if command == "load current":
         return map, player_state
+    elif command == "load fresh":
+        map = run_world_gen(map_size, map_size)
+        player_state = [0, 0]
+        return map, player_state
+    else:
+        file_location = "save_data/" + command[5:]
+        with open(file_location, 'r') as json_file:
+            data = json.load(json_file)
+            map = data[0]
+            player_state = data[1]
+            return map, player_state
+
 
 def process_command(command, map, player_state):
     if command[:4].lower() == "save":
         save_game(command, map, player_state)
         print("Saving")
     elif command[:4].lower() == "load":
-        map, player_state = load_game(command)
+        map, player_state = load_game(command, map, player_state)
         print("Loading")
     move_player(command.lower())
-    state = { "command_len": len(command) }
+    state = {"command_len": len(command)}
     if command == "":
         state['error_msg'] = "Please enter a command"
     state['command'] = command
     print(state)
     return state, map, player_state
+
 
 def move_player(move):
     if move == "down":
@@ -89,25 +95,39 @@ def move_player(move):
         if player_state[0] > 0:
             player_state[0] -= 1
 
+
 @app.get("/index")
 async def command(request: Request, command: str):
     global player_state
     global map
     print(command)
     state, map, player_state = process_command(command, map, player_state)
-    return templates.TemplateResponse('game/game.j2', {"request": request, "player_state": player_state, "map": map, "state": {}})
+    return templates.TemplateResponse('game/game.j2',
+                                      {"request": request, "player_state": player_state, "map": map, "state": {}})
 
 
 @app.post("/index")
-async def command(request: Request, command: str = Form(default = "")):
+async def command(request: Request, command: str = Form(default="")):
     global player_state
     global map
     print(command)
     state, map, player_state = process_command(command, map, player_state)
-    return templates.TemplateResponse('game/game.j2', {"request": request, "player_state": player_state, "map": map, "state": state})
+    return templates.TemplateResponse('game/game.j2',
+                                      {"request": request, "player_state": player_state, "map": map, "state": state})
+
+
+@app.post("/interact")
+async def interact(request: Request, ):
+    return templates.TemplateResponse('game/interact.j2', {"request": request})
+
+
+@app.get("/interact")
+async def interact(request: Request):
+    return templates.TemplateResponse('game/interact.j2', {"request": request})
+
 
 @app.post("/")
-async def move(request: Request,):
+async def move(request: Request, ):
     return templates.TemplateResponse('game/game.j2', {"request": request, "state": {}})
 
 
@@ -120,11 +140,12 @@ async def root(request: Request):
     """
     folder_path = 'save_data'
     items = os.listdir(folder_path)
+    items.remove(".gitkeep")
     return templates.TemplateResponse("index.j2", {"request": request, "items": items})
 
 
 @app.get("/{path:path}")
-async def handle_request(path:str, request: Request):
+async def handle_request(path: str, request: Request):
     """
     Handle all not specified requests from client
     :param path: requested path
