@@ -6,6 +6,7 @@ from typing import Annotated
 import json
 from pathlib import Path
 from world_map_gen import run_world_gen
+import time
 
 import uvicorn
 from fastapi import FastAPI, Request, Response, UploadFile, File, HTTPException, Form
@@ -18,6 +19,7 @@ from starlette.responses import HTMLResponse
 map_size = 16
 player_state = [0, 0]
 map = []
+last_interaction = 0
 
 # Get the directory of the current Python script
 current_dir = Path(__file__).resolve().parent
@@ -173,11 +175,22 @@ async def command(request: Request, command: str = Form(default="")):
 
 @app.post("/interact")
 async def interact(request: Request, interact: str = Form(default="")):
+    global last_interaction
     current_tile = map[player_state[0]][player_state[1]]
     tile_data = get_tile_text(current_tile)
     print(tile_data)
     print(interact)
-    return templates.TemplateResponse('game/interact.j2', {"request": request, "tile_data": tile_data})
+    print(last_interaction)
+    print(time.time() - last_interaction)
+    if last_interaction == 0:
+        last_interaction = time.time()
+        interaction_succeeded = True
+    elif time.time() - last_interaction > 5:
+        last_interaction = time.time()
+        interaction_succeeded = True
+    else:
+        interaction_succeeded = False
+    return templates.TemplateResponse('game/interact.j2', {"request": request, "tile_data": tile_data, "interaction_succeeded": interaction_succeeded})
 
 
 @app.get("/interact")

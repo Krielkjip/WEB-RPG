@@ -12,6 +12,17 @@
             width: 500px; /* Adjust the width as needed */
             word-wrap: break-word;
         }
+
+        .error {
+            border: 2px solid red;
+            padding: 5px;
+            display: inline-block;
+        }
+
+        .error-icon {
+            color: red;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body style="background-color: #0d183a;">
@@ -39,5 +50,12 @@
         {% endif %}
     {% endfor %}
 </form>
+{% if interaction_succeeded %}
+    <p>Interaction was successful!!</p>
+{% else %}
+    <div class="error">
+    <span class="error-icon">&#9888;</span>you clicked to fast
+    </div>
+{% endif %}
 </body>
 </html>
