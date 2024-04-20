@@ -7,10 +7,27 @@
         body {
             color: white;
         }
+
+        .short-text {
+            width: 500px; /* Adjust the width as needed */
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body style="background-color: #0d183a;">
-<h1>Interact</h1>
-<a href="/index?command=load current">Back to map</a>
+<h1>Interact</h1><br>
+<h2>{{ tile_data[1] }}</h2>
+<p class="short-text">{{ tile_data[2] }}</p>
+<h2>Mobs</h2>
+{% for item in tile_data[3] %}
+    <li>{{ item }}</li>
+{% endfor %}
+<br>
+<h2>Objects</h2>
+{% for item in tile_data[4] %}
+    <li>{{ item }}</li>
+{% endfor %}
+<br>
+<button onclick="location.href='/index?command=load current'">Back to map</button>
 </body>
 </html>
