@@ -106,6 +106,12 @@
     </div>
     <br><br>
 {% endif %}
+{% if state.file_not_found %}
+    <div class="error">
+        <span class="error-icon">&#9888;</span>file:{{ state.command[5:] }} not found
+    </div>
+    <br><br>
+{% endif %}
 
 <h2>Send Command</h2>
 <form action="/index" method="POST">
@@ -127,6 +133,6 @@
     <button type="submit" name="command" value="Interact">Interact</button>
 </form>
 <br>
-<a href="/">Home</a>
+<button onclick="location.href='/'">Home</button>
 </body>
 </html>

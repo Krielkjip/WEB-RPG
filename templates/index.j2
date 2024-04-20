@@ -11,7 +11,10 @@
 </head>
 <body style="background-color: #0d183a;">
 <h1>Home, landing page</h1>
-<a href="/index?command=load fresh">New Game</a><br/>
+<form action="/index" method="GET">
+    <input type="hidden" name="command" value="load fresh">
+    <button type="submit">New Game</button>
+</form>
 {#    <a href="/interact">interact Menu</a><br/>#}
 
 <br/>
@@ -19,7 +22,12 @@
 <ul>
     {#        {{ items }}#}
     {% for item in items %}
-        <li><a href="/index?command=load {{ item }}">{{ item[:-5] }}</a></li>
+        <li>
+            <form action="/index" method="GET">
+                <input type="hidden" name="command" value="load {{ item }}">
+                <button type="submit">{{ item[:-5] }}</button>
+            </form>
+        </li>
         {#            <li>{{ item }}</li>#}
     {% endfor %}
 </ul>

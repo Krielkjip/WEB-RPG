@@ -49,29 +49,33 @@ def save_game(command, map, player_state):
 
 def load_game(command, map, player_state):
     if command == "load current":
-        return map, player_state
+        return map, player_state, False
     elif command == "load fresh":
         map = run_world_gen(map_size, map_size)
         player_state = [0, 0]
-        return map, player_state
+        return map, player_state, False
     else:
-        file_location = "save_data/" + command[5:]
-        with open(file_location, 'r') as json_file:
-            data = json.load(json_file)
-            map = data[0]
-            player_state = data[1]
-            return map, player_state
-
+        try:
+            file_location = "save_data/" + command[5:] + ".json"
+            with open(file_location, 'r') as json_file:
+                data = json.load(json_file)
+                map = data[0]
+                player_state = data[1]
+                return map, player_state, False
+        except FileNotFoundError:
+            return map, player_state, True
 
 def process_command(command, map, player_state):
+    move_player(command.lower())
+    state = {"command_len": len(command)}
     if command[:4].lower() == "save":
         save_game(command, map, player_state)
         print("Saving")
     elif command[:4].lower() == "load":
-        map, player_state = load_game(command, map, player_state)
+        map, player_state, file_not_found = load_game(command, map, player_state)
+        if file_not_found:
+            state["file_not_found"] = True
         print("Loading")
-    move_player(command.lower())
-    state = {"command_len": len(command)}
     if command == "":
         state['error_msg'] = "Please enter a command"
     state['command'] = command
