@@ -29,5 +29,15 @@
 {% endfor %}
 <br>
 <button onclick="location.href='/index?command=load current'">Back to map</button>
+<br><br>
+<form action="/interact" method="POST">
+    {% for item in tile_data[4] %}
+        {% if item == "Tree" %}
+            <button type="submit" name="interact" value="Cut Tree">Cut Tree</button>
+        {% elif item == "Rock" %}
+            <button type="submit" name="interact" value="Mine Rock">Mine Rock</button>
+        {% endif %}
+    {% endfor %}
+</form>
 </body>
 </html>
