@@ -17,7 +17,13 @@ from fastapi.responses import StreamingResponse
 from starlette.responses import HTMLResponse
 
 map_size = 16
-player_state = [0, 0]
+player_state = {"location": [0, 0], "inventory": []}
+
+
+def create_player_state():
+    return {"location": [0, 0], "inventory": {"logs_amount": 0, "rocks_amount": 0}}
+
+
 map = []
 last_interaction = 0
 
@@ -52,7 +58,7 @@ def load_game(command, map, player_state):
         return map, player_state, False
     elif command == "load fresh":
         map = run_world_gen(map_size, map_size)
-        player_state = [0, 0]
+        player_state = create_player_state()
         return map, player_state, False
     else:
         try:
@@ -88,22 +94,24 @@ def process_command(command, map, player_state):
 
 
 def move_player(move):
+    location = player_state['location']
     if move == "down":
         print("Moving down")
-        if player_state[1] < map_size - 1:
-            player_state[1] += 1
+        if location[1] < map_size - 1:
+            location[1] += 1
     elif move == "up":
         print("Moving up")
-        if player_state[1] > 0:
-            player_state[1] -= 1
+        if location[1] > 0:
+            location[1] -= 1
     elif move == "right":
         print("Moving right")
-        if player_state[0] < map_size - 1:
-            player_state[0] += 1
+        if location[0] < map_size - 1:
+            location[0] += 1
     elif move == "left":
         print("Moving left")
-        if player_state[0] > 0:
-            player_state[0] -= 1
+        if location[0] > 0:
+            location[0] -= 1
+    player_state["location"] = location
 
 
 def get_tile_text(current_tile):
@@ -181,14 +189,17 @@ async def command(request: Request, command: str = Form(default="")):
                                       {"request": request, "player_state": player_state, "map": map, "state": state})
 
 def collect_resource(interact, player_state):
-    pass
-
+    if interact == "Cut Tree":
+        player_state["inventory"]["logs_amount"] += 1
+    elif interact == "Mine Rock":
+        player_state["inventory"]["rocks_amount"] += 1
+    return player_state
 
 @app.post("/interact")
 async def interact(request: Request, interact: str = Form(default="")):
     global last_interaction
     global player_state
-    current_tile = map[player_state[0]][player_state[1]]
+    current_tile = map[player_state["location"][0]][player_state["location"][1]]
     tile_data = get_tile_text(current_tile)
     print(tile_data)
     print(interact)
@@ -201,10 +212,10 @@ async def interact(request: Request, interact: str = Form(default="")):
     elif time.time() - last_interaction > 5:
         last_interaction = time.time()
         interaction_succeeded = True
-        player_state= collect_resource(interact, player_state)
+        player_state = collect_resource(interact, player_state)
     else:
         interaction_succeeded = False
-    return templates.TemplateResponse('game/interact.j2', {"request": request, "tile_data": tile_data, "interaction_succeeded": interaction_succeeded, player_state: player_state})
+    return templates.TemplateResponse('game/interact.j2', {"request": request, "tile_data": tile_data, "interaction_succeeded": interaction_succeeded, "player_state": player_state})
 
 
 @app.get("/interact")

@@ -86,7 +86,7 @@
                 {% for x in range(map_size) %}
                     {% set item = map[x][y] %}
                     {% set type_info = type_map[item] %}
-                    {% if player_state[0] == x and player_state[1] == y %}
+                    {% if player_state["location"][0] == x and player_state["location"][1] == y %}
                         {#                <td class="grid-item player" style="color: yellow">X</td>#}
                         <td class="player" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
                     {% else %}
