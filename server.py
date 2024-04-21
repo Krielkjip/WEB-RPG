@@ -56,7 +56,11 @@ def load_game(command, map, player_state):
         return map, player_state, False
     else:
         try:
-            file_location = "save_data/" + command[5:] + ".json"
+            if command[-5:] == ".json":
+                file_location = "save_data/" + command[5:]
+            else:
+                file_location = "save_data/" + command[5:] + ".json"
+            print(file_location)
             with open(file_location, 'r') as json_file:
                 data = json.load(json_file)
                 map = data[0]
@@ -176,10 +180,14 @@ async def command(request: Request, command: str = Form(default="")):
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": map, "state": state})
 
+def collect_resource(interact, player_state):
+    pass
+
 
 @app.post("/interact")
 async def interact(request: Request, interact: str = Form(default="")):
     global last_interaction
+    global player_state
     current_tile = map[player_state[0]][player_state[1]]
     tile_data = get_tile_text(current_tile)
     print(tile_data)
@@ -189,12 +197,14 @@ async def interact(request: Request, interact: str = Form(default="")):
     if last_interaction == 0:
         last_interaction = time.time()
         interaction_succeeded = True
+        player_state = collect_resource(interact, player_state)
     elif time.time() - last_interaction > 5:
         last_interaction = time.time()
         interaction_succeeded = True
+        player_state= collect_resource(interact, player_state)
     else:
         interaction_succeeded = False
-    return templates.TemplateResponse('game/interact.j2', {"request": request, "tile_data": tile_data, "interaction_succeeded": interaction_succeeded})
+    return templates.TemplateResponse('game/interact.j2', {"request": request, "tile_data": tile_data, "interaction_succeeded": interaction_succeeded, player_state: player_state})
 
 
 @app.get("/interact")
