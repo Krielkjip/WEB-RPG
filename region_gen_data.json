@@ -1,0 +1,142 @@
+{
+  "Grassland": {
+    "Tree": 4,
+    "Grass": 1,
+    "Pebble": 1
+  },
+  "Forest": {
+    "Tree": 1,
+    "Grass": 1,
+    "Pebble": 3
+  },
+  "Mountain": {
+    "Rock": 1,
+    "Iron Ore": 4,
+    "Snow": 4,
+    "Deep Snow": 1,
+    "Ice": 4
+  },
+  "Ocean": {
+    "Water": 1
+  },
+  "Desert": {
+    "Sand": 4,
+    "Sandstone": 1,
+    "Cactus": 4
+  },
+  "Rainforest": {
+    "Water": 1,
+    "Mud": 1,
+    "Moss": 2,
+    "Tree": 2,
+    "Grass": 1
+  },
+  "Temperate Forest": {
+    "Fungi Tree": 1,
+    "Fungi": 1,
+    "Tree": 2,
+    "Bush": 1,
+    "Grass": 1
+  },
+  "Tundra": {
+    "Bush": 2,
+    "Moss": 1,
+    "Grass": 1,
+    "Pebble": 1
+  },
+  "Taiga": {
+    "Snow": 1,
+    "Tree": 1,
+    "Ice": 3,
+    "Deep Snow": 3
+  },
+  "Taiga Forest": {
+    "Snow": 4,
+    "Tree": 1,
+    "Ice": 1,
+    "Deep Snow": 1
+  },
+  "Savanna": {
+    "Dead Tree": 1,
+    "Dead Bush": 1,
+    "Sand": 1
+  },
+  "Volcano": {
+    "Rock": 1,
+    "Ash": 1,
+    "Ash Rock": 1,
+    "Sulfur": 1,
+    "Magma": 2
+  },
+  "Regions in Biomes": {
+    "Grassland": [
+      "Tree",
+      "Grass",
+      "Pebble"
+    ],
+    "Forest": [
+      "Tree",
+      "Grass",
+      "Pebble"
+    ],
+    "Mountain": [
+      "Rock",
+      "Iron Ore",
+      "Snow",
+      "Deep Snow",
+      "Ice"
+    ],
+    "Ocean": [
+      "Water"
+    ],
+    "Desert": [
+      "Sand",
+      "Sandstone",
+      "Cactus"
+    ],
+    "Rainforest": [
+      "Water",
+      "Mud",
+      "Moss",
+      "Tree",
+      "Grass"
+    ],
+    "Temperate Forest": [
+      "Tree",
+      "Bush",
+      "Grass",
+      "Fungi",
+      "Fungi Tree"
+    ],
+    "Tundra": [
+      "Bush",
+      "Moss",
+      "Grass",
+      "Pebble"
+    ],
+    "Taiga": [
+      "Snow",
+      "Tree",
+      "Ice",
+      "Deep Snow"
+    ],
+    "Taiga Forest": [
+      "Snow",
+      "Tree",
+      "Ice",
+      "Deep Snow"
+    ],
+    "Savanna": [
+      "Dead Tree",
+      "Dead Bush",
+      "Sand"
+    ],
+    "Volcano": [
+      "Sulfur",
+      "Rock",
+      "Ash",
+      "Ash Rock",
+      "Magma"
+    ]
+  }
+}
