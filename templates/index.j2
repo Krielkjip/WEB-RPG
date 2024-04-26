@@ -31,6 +31,36 @@
         {#            <li>{{ item }}</li>#}
     {% endfor %}
 </ul>
+
+{#BLINKING LETTER TEST#}
+<style>
+    .hidden-letter {
+        display: none;
+    }
+</style>
+    <span class="blinkingText">K</span><span class="hiddenText hidden-letter">B</span>
+    <span class="blinkingText">C</span><span class="hiddenText hidden-letter">D</span>
+    <span class="blinkingText">E</span><span class="hiddenText hidden-letter">F</span>
+
+    <script>
+        // JavaScript to toggle between A and B rapidly for blinking effect
+        setInterval(function() {
+            var blinkingTexts = document.querySelectorAll(".blinkingText");
+            var hiddenTexts = document.querySelectorAll(".hiddenText");
+
+            blinkingTexts.forEach(function(blinkingText, index) {
+                if (blinkingText.style.display === "none") {
+                    blinkingText.style.display = "inline";
+                    hiddenTexts[index].style.display = "none";
+                } else {
+                    blinkingText.style.display = "none";
+                    hiddenTexts[index].style.display = "inline";
+                }
+            });
+        }, 500); // Change the interval (in milliseconds) as needed for faster blinking
+    </script>
+
+
 <img src="/statics/krielkjip.png" alt="KrielKjip"/>
 </body>
 </html>

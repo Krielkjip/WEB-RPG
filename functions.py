@@ -37,7 +37,7 @@ def load_game(command, map_size, map, player_state):
 
 
 def process_command(command, map_size, map, player_state):
-    move_player(command.lower(), map_size, player_state)
+    player_state = move_player(command, map_size, player_state, "World")
     state = {"command_len": len(command)}
     if command[:4].lower() == "save":
         save_game(command, map, player_state)
@@ -54,8 +54,12 @@ def process_command(command, map_size, map, player_state):
     return state, map, player_state
 
 
-def move_player(move, map_size, player_state):
-    location = player_state['location']
+def move_player(move, map_size, player_state, where):
+    move = move.lower()
+    if where == "World":
+        location = player_state['location']
+    else:
+        location = player_state['region_location']
     if move == "down":
         print("Moving down")
         if location[1] < map_size - 1:
@@ -72,15 +76,21 @@ def move_player(move, map_size, player_state):
         print("Moving left")
         if location[0] > 0:
             location[0] -= 1
-    player_state["location"] = location
+    if where == "World":
+        player_state["location"] = location
+    else:
+        player_state["region_location"] = location
+    return player_state
 
 
-def collect_resource(interact, player_state):
+def collect_resource(interact, player_state, region_map):
     if interact == "Cut Tree":
         player_state["inventory"]["logs_amount"] += 1
+        region_map[player_state["region_location"][0]][player_state["region_location"][1]] = "Grass"
     elif interact == "Mine Rock":
         player_state["inventory"]["rocks_amount"] += 1
-    return player_state
+        region_map[player_state["region_location"][0]][player_state["region_location"][1]] = "Dirt"
+    return player_state, region_map
 
 
 def get_tile_text(current_tile):

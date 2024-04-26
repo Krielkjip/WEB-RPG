@@ -132,13 +132,13 @@ def modify_terrain(terrain_grid, height, width, biome):
 # Main function to generate region
 def main(height, width, biome):
     terrain_grid = generate_terrain(height, width, biome)
-    display_terrain(terrain_grid, height, width)
+    # display_terrain(terrain_grid, height, width)
     # print(" ")
     for x in range(1):
         modify_terrain(terrain_grid, height, width, biome)
-        print("\nTerrain Map after Modification:")
-        display_terrain(terrain_grid, height, width)
-        print(" ")
+        # print("\nTerrain Map after Modification:")
+        # display_terrain(terrain_grid, height, width)
+        # print(" ")
         # print("\nTerrain Map as a List:")
 
     return terrain_grid
@@ -150,5 +150,5 @@ def run_region_gen(height, width, biome):
     # print(region_map)
     return region_map
 
-run_region_gen(8, 8, "Volcano")
-input("Press any key to exit...")
+# run_region_gen(8, 8, "Volcano")
+# input("Press any key to exit...")

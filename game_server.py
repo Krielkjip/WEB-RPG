@@ -10,10 +10,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse
 
 from functions import *
+from region_map_gen import *
 
 map_size = 16
-player_state = {"location": [0, 0], "inventory": []}
+region_map_size = 8
+player_state = {"location": [0, 0], "region_location": [0, 0], "inventory": []}
 map = []
+region_map = []
 last_interaction = 0
 
 # Get the directory of the current Python script
@@ -54,27 +57,27 @@ async def command(request: Request, command: str = Form(default="")):
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": map, "state": state})
 
+
 @app.post("/interact")
 async def interact(request: Request, interact: str = Form(default="")):
     global last_interaction
     global player_state
-    current_tile = map[player_state["location"][0]][player_state["location"][1]]
-    tile_data = get_tile_text(current_tile)
-    print(tile_data)
+    global region_map
+    current_biome = map[player_state["location"][0]][player_state["location"][1]]
+    biome_data = get_tile_text(current_biome)
+    print(biome_data)
     print(interact)
-    print(last_interaction)
-    print(time.time() - last_interaction)
-    if last_interaction == 0:
-        last_interaction = time.time()
-        interaction_succeeded = True
-        player_state = collect_resource(interact, player_state)
-    elif time.time() - last_interaction > 5:
-        last_interaction = time.time()
-        interaction_succeeded = True
-        player_state = collect_resource(interact, player_state)
-    else:
-        interaction_succeeded = False
-    return templates.TemplateResponse('game/interact.j2', {"request": request, "tile_data": tile_data, "interaction_succeeded": interaction_succeeded, "player_state": player_state})
+    interaction_succeeded = True
+    if interact == "Interact Gen Region":
+        region_map = run_region_gen(region_map_size, region_map_size, map[player_state["location"][0]][player_state["location"][1]])
+        print("Gen Region Map")
+        player_state["region_location"] = [0, 0]
+    player_state, region_map= collect_resource(interact, player_state, region_map)
+    player_state = move_player(interact, region_map_size,player_state, "Region")
+    return templates.TemplateResponse('game/interact.j2',
+                                      {"request": request, "biome_data": biome_data, "region_map": region_map,
+                                       "interaction_succeeded": interaction_succeeded, "player_state": player_state})
+
 
 @app.get("/")
 async def root(request: Request):
