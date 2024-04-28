@@ -128,12 +128,12 @@
 
 <H2>Controls</H2>
 <form action="/interact" method="POST">
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Up">↑</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Move Up">↑</button>
     <br>
-    <button type="submit" name="interact" value="Left">←</button>
-    <button type="submit" name="interact" value="Right">→</button>
+    <button type="submit" name="interact" value="Move Left">←</button>
+    <button type="submit" name="interact" value="Move Right">→</button>
     <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Down">↓</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Move Down">↓</button>
 </form>
 
 {% set current_tile = region_map[player_state["region_location"][0]][player_state["region_location"][1]] %}
@@ -146,13 +146,13 @@
 </form>
 
 
-{% if interaction_succeeded %}
-    <p>Interaction was successful!!</p>
-{% else %}
-    <div class="error">
-        <span class="error-icon">&#9888;</span>you clicked to fast
-    </div>
-{% endif %}
+{#{% if interaction_succeeded %}#}
+{#    <p>Interaction was successful!!</p>#}
+{#{% else %}#}
+{#    <div class="error">#}
+{#        <span class="error-icon">&#9888;</span>you clicked to fast#}
+{#    </div>#}
+{#{% endif %}#}
 
 {{ player_state }}
 {{ region_map }}

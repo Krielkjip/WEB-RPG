@@ -32,11 +32,11 @@
 </head>
 <body style="background-color: #0d183a;">
 <h2>Request Data</h2>
-<ul>
-    {% for key in state %}
-        <li><strong>{{ key }}</strong>: {{ state[key] }}</li>
-    {% endfor %}
-</ul>
+{#<ul>#}
+{#    {% for key in state %}#}
+{#        <li><strong>{{ key }}</strong>: {{ state[key] }}</li>#}
+{#    {% endfor %}#}
+{#</ul>#}
 
 
 {% if map is none %}
@@ -121,16 +121,16 @@
 </form>
 <H2>Controls</H2>
 <form action="/index" method="POST">
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Up">↑</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Up">↑</button>
     <br>
-    <button type="submit" name="command" value="Left">←</button>
-    <button type="submit" name="command" value="Right">→</button>
+    <button type="submit" name="command" value="Move Left">←</button>
+    <button type="submit" name="command" value="Move Right">→</button>
     <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Down">↓</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Down">↓</button>
 </form>
 <br>
 <form action="/interact" method="POST">
-    <button type="submit" name="interact" value="Interact Gen Region">Interact</button>
+    <button type="submit" name="interact" value="Interact Get Region">Interact</button>
 </form>
 <br>
 <button onclick="location.href='/'">Home</button>

@@ -1,5 +1,8 @@
 import json
+import random
+
 from world_map_gen import run_world_gen
+from region_map_gen import run_region_gen
 
 
 def create_player_state():
@@ -17,7 +20,12 @@ def load_game(command, map_size, map, player_state):
     if command == "load current":
         return map, player_state, False
     elif command == "load fresh":
-        map = run_world_gen(map_size, map_size)
+        map["world_map"] = run_world_gen(map_size, map_size)
+        for x in range(map_size):
+            for y in range(map_size):
+                current_biome = map["world_map"][x][y]
+                current_region = run_region_gen(map_size, map_size, current_biome)
+                map["region_map"][f"{x}_{y}"] = current_region
         player_state = create_player_state()
         return map, player_state, False
     else:
@@ -54,25 +62,48 @@ def process_command(command, map_size, map, player_state):
     return state, map, player_state
 
 
+def process_interact(interact, region_map_size, region_map, map, player_state, mobs_data):
+    current_biome = map["world_map"][player_state["location"][0]][player_state["location"][1]]
+    biome_data = get_tile_text(current_biome)
+    print(biome_data)
+    print(interact)
+    if interact == "Interact Get Region":
+        region_map = map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"]
+        print(region_map)
+        # region_map = run_region_gen(region_map_size, region_map_size, current_biome)
+        # print("Gen Region Map")
+        player_state["region_location"] = [0, 0]
+        # mobs_data = [random.randint(0, region_map_size), random.randint(0, region_map_size), "Chicken"]
+    elif interact[:4].lower() == "move":
+        player_state = move_player(interact, region_map_size, player_state, "Region")
+        # while True:
+        #     random.randint(0, 3)
+            # TODO Make chicken move random
+    else:
+        player_state, region_map = collect_resource(interact, player_state, region_map)
+    map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"] = region_map
+    return region_map, player_state, biome_data, mobs_data
+
+
 def move_player(move, map_size, player_state, where):
     move = move.lower()
     if where == "World":
         location = player_state['location']
     else:
         location = player_state['region_location']
-    if move == "down":
+    if move == "move down":
         print("Moving down")
         if location[1] < map_size - 1:
             location[1] += 1
-    elif move == "up":
+    elif move == "move up":
         print("Moving up")
         if location[1] > 0:
             location[1] -= 1
-    elif move == "right":
+    elif move == "move right":
         print("Moving right")
         if location[0] < map_size - 1:
             location[0] += 1
-    elif move == "left":
+    elif move == "move left":
         print("Moving left")
         if location[0] > 0:
             location[0] -= 1
