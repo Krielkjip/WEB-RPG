@@ -29,27 +29,6 @@
 <h1>Interact</h1><br>
 <h2>{{ biome_data[1] }}</h2>
 <p class="short-text">{{ biome_data[2] }}</p>
-<h2>Mobs</h2>
-{% for item in biome_data[3] %}
-    <li>{{ item }}</li>
-{% endfor %}
-<br>
-<h2>Objects</h2>
-{% for item in biome_data[4] %}
-    <li>{{ item }}</li>
-{% endfor %}
-<br>
-<button onclick="location.href='/index?command=load current'">Back to map</button>
-<br><br>
-{#<form action="/interact" method="POST">#}
-{#    {% for item in biome_data[4] %}#}
-{#        {% if item == "Tree" %}#}
-{#            <button type="submit" name="interact" value="Cut Tree">Cut Tree</button>#}
-{#        {% elif item == "Rock" %}#}
-{#            <button type="submit" name="interact" value="Mine Rock">Mine Rock</button>#}
-{#        {% endif %}#}
-{#    {% endfor %}#}
-{#</form>#}
 
 {% if region_map is none %}
     <p>Region Map is null</p>
@@ -127,6 +106,8 @@
 {% endif %}
 
 <H2>Controls</H2>
+<button onclick="location.href='/index?command=load current'">Back to map</button>
+<br><br>
 <form action="/interact" method="POST">
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Move Up">↑</button>
     <br>
