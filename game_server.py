@@ -13,11 +13,11 @@ from functions import *
 
 map_size = 16
 region_map_size = 8
-player_state = {"location": [0, 0], "inventory": []}
 mobs_data = []
-map = {"world_map": [], "region_map": {}}
 region_map = []
 last_interaction = 0
+map = create_map()
+player_state = create_player_state()
 
 # Get the directory of the current Python script
 current_dir = Path(__file__).resolve().parent
@@ -43,8 +43,9 @@ async def command(request: Request, command: str):
     global player_state
     global map
     print(command)
-    state, map, player_state = process_command(command, map_size, map, player_state)
+    state, map, player_state = process_command(command, map_size, region_map_size, map, player_state)
     world_map = map["world_map"]
+    print(player_state["location"])
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map, "state": {}})
 
@@ -54,7 +55,7 @@ async def command(request: Request, command: str = Form(default="")):
     global player_state
     global map
     print(command)
-    state, map, player_state = process_command(command, map_size, map, player_state)
+    state, map, player_state = process_command(command, map_size, region_map_size, map, player_state)
     world_map = map["world_map"]
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map, "state": state})
@@ -65,7 +66,7 @@ async def interact(request: Request, interact: str = Form(default="")):
     global player_state
     global region_map
     global mobs_data
-    region_map, player_state, biome_data, mobs_data = process_interact(interact, region_map_size, region_map, map, player_state, mobs_data)
+    region_map, player_state, biome_data, mobs_data = process_interact(interact, region_map_size, map_size, region_map, map, player_state, mobs_data)
     print(player_state)
     return templates.TemplateResponse('game/interact.j2',
                                       {"request": request, "biome_data": biome_data, "region_map": region_map,
