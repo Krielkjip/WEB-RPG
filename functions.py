@@ -21,11 +21,11 @@ def load_game(command, map_size, map, player_state):
         return map, player_state, False
     elif command == "load fresh":
         map["world_map"] = run_world_gen(map_size, map_size)
-        for x in range(map_size):
-            for y in range(map_size):
-                current_biome = map["world_map"][x][y]
-                current_region = run_region_gen(map_size, map_size, current_biome)
-                map["region_map"][f"{x}_{y}"] = current_region
+        # for x in range(map_size):
+        #     for y in range(map_size):
+        #         current_biome = map["world_map"][x][y]
+        #         current_region = run_region_gen(map_size, map_size, current_biome)
+        #         map["region_map"][f"{x}_{y}"] = current_region
         player_state = create_player_state()
         return map, player_state, False
     else:
@@ -68,7 +68,12 @@ def process_interact(interact, region_map_size, region_map, map, player_state, m
     print(biome_data)
     print(interact)
     if interact == "Interact Get Region":
-        region_map = map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"]
+        try:
+            region_map = map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"]
+        except KeyError:
+            region_map = run_region_gen(region_map_size, region_map_size, current_biome)
+            # map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"] = region_map
+
         print(region_map)
         # region_map = run_region_gen(region_map_size, region_map_size, current_biome)
         # print("Gen Region Map")
