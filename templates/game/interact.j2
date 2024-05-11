@@ -85,24 +85,66 @@
         table {
             border-collapse: collapse; /* Collapse table borders */
         }
+
+        .hidden-letter {
+            display: none;
+        }
     </style>
+    <script>
+        // JavaScript to toggle between A and B rapidly for blinking effect
+        setInterval(function () {
+            var blinkingTexts = document.querySelectorAll(".blinkingText");
+            var hiddenTexts = document.querySelectorAll(".hiddenText");
+
+            blinkingTexts.forEach(function (blinkingText, index) {
+                if (blinkingText.style.display === "none") {
+                    blinkingText.style.display = "inline";
+                    hiddenTexts[index].style.display = "none";
+                } else {
+                    blinkingText.style.display = "none";
+                    hiddenTexts[index].style.display = "inline";
+                }
+            });
+        }, 500); // Change the interval (in milliseconds) as needed for faster blinking
+    </script>
     {% set region_map_size = region_map|length %}
+    {% set mobs_data_length = mobs_data|length %}
+    {# TODO MAKE PRINTING REGION MAP#}
     <table>
         {% for y in range(region_map_size) %}
             <tr>
                 {% for x in range(region_map_size) %}
                     {% set item = region_map[x][y] %}
                     {% set type_info = type_region_map[item] %}
+                    {% set found_mob = False %}
                     {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
-                        {#                <td class="grid-item player" style="color: yellow">X</td>#}
+                        {#                        <td class="grid-item player" style="color: yellow">X</td>#}
                         <td class="player" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
                     {% else %}
-                        <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                        {% set found_mob = False %}
+                        {% for i in mobs_data %}
+                            {% set data = mobs_data[i] %}
+                            {% if player_state["location"][0] == data["location"][0] and player_state["location"][1] == data["location"][1] %}
+                                {% if data["region_location"][0] == x and data["region_location"][1] == y %}
+                                    {% set found_mob = True %}
+                                    {{ found_mob }}
+                                    <td class="blinkingText">C</td>
+                                    <td class="hiddenText hidden-letter"
+                                        style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                                {% endif %}
+                            {% endif %}
+                            {{ found_mob }}
+                        {% endfor %}
+                        {{ found_mob }}
+                        {% if not found_mob %}
+                            <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </tr>
         {% endfor %}
     </table>
+    {# TODO MAKE PRINTING REGION MAP#}
 {% endif %}
 
 <H2>Controls</H2>
@@ -135,7 +177,10 @@
 {#    </div>#}
 {#{% endif %}#}
 
-{{ player_state }}
-{{ region_map }}
+{{ player_state }}<br/>
+{{ player_state['location'][0] }}<br/>
+{{ region_map }}<br/>
+<hr/>
+{{ mobs_data }}
 </body>
 </html>

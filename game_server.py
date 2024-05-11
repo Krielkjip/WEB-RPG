@@ -42,9 +42,11 @@ app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 async def command(request: Request, command: str):
     global player_state
     global map
+    global mobs_data
     print(command)
-    state, map, player_state = process_command(command, map_size, region_map_size, map, player_state)
+    state, map, player_state, mobs_data = process_command(command, map_size, region_map_size, map, player_state, mobs_data)
     world_map = map["world_map"]
+    print(player_state["location"])
     print(player_state["location"])
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map, "state": {}})
@@ -54,8 +56,9 @@ async def command(request: Request, command: str):
 async def command(request: Request, command: str = Form(default="")):
     global player_state
     global map
+    global mobs_data
     print(command)
-    state, map, player_state = process_command(command, map_size, region_map_size, map, player_state)
+    state, map, player_state, mobs_data = process_command(command, map_size, region_map_size, map, player_state, mobs_data)
     world_map = map["world_map"]
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map, "state": state})
@@ -69,8 +72,7 @@ async def interact(request: Request, interact: str = Form(default="")):
     region_map, player_state, biome_data, mobs_data = process_interact(interact, region_map_size, map_size, region_map, map, player_state, mobs_data)
     print(player_state)
     return templates.TemplateResponse('game/interact.j2',
-                                      {"request": request, "biome_data": biome_data, "region_map": region_map,
-                                        "player_state": player_state, "mobs_data": mobs_data})
+                                      {"request": request, "biome_data": biome_data, "region_map": region_map, "player_state": player_state, "mobs_data": mobs_data})
 
 
 @app.get("/")

@@ -8,21 +8,27 @@ from region_map_gen import run_region_gen
 def create_player_state():
     return {"location": [0, 0], "region_location": [0, 0], "inventory": {"logs_amount": 0, "rocks_amount": 0}}
 
+
 def create_map():
     return {"world_map": [], "region_map": {}}
 
-def save_game(command, map, player_state):
+
+def save_game(command, map, player_state, mobs_data):
     file_location = "save_data/" + command[5:] + ".json"
     with open(file_location, 'w') as json_file:
-        json.dump([map, player_state], json_file)
+        json.dump([map, mobs_data, player_state], json_file)
         print("SAVED DATA")
 
 
-def load_game(command, map_size, map, player_state):
+def load_game(command, map_size, map, player_state, mobs_data):
     if command == "load current":
-        return map, player_state, False
+        return map, player_state, mobs_data, False
     elif command == "load fresh":
         player_state = create_player_state()
+        mobs_data = {
+            "0": {"name": "Chicken", "location": [0, 0], "region_location": [2, 2]},
+            "1": {"name": "Chicken", "location": [0, 0], "region_location": [5, 5]}
+        }
         map = create_map()
         map["world_map"] = run_world_gen(map_size, map_size)
         # for x in range(map_size):
@@ -30,7 +36,7 @@ def load_game(command, map_size, map, player_state):
         #         current_biome = map["world_map"][x][y]
         #         current_region = run_region_gen(map_size, map_size, current_biome)
         #         map["region_map"][f"{x}_{y}"] = current_region
-        return map, player_state, False
+        return map, player_state, mobs_data, False
     else:
         try:
             if command[-5:] == ".json":
@@ -42,19 +48,20 @@ def load_game(command, map_size, map, player_state):
                 data = json.load(json_file)
                 map = data[0]
                 player_state = data[1]
-                return map, player_state, False
+                mobs_data = data[2]
+                return map, player_state, mobs_data, False
         except FileNotFoundError:
-            return map, player_state, True
+            return map, player_state, mobs_data, True
 
 
-def process_command(command, map_size, region_map_size, map, player_state):
+def process_command(command, map_size, region_map_size, map, player_state, mobs_data):
     player_state, world_change = move_player(command, map_size, region_map_size, player_state, "World")
     state = {"command_len": len(command)}
     if command[:4].lower() == "save":
-        save_game(command, map, player_state)
+        save_game(command, map, player_state, mobs_data)
         print("Saving")
     elif command[:4].lower() == "load":
-        map, player_state, file_not_found = load_game(command, map_size, map, player_state)
+        map, player_state, mobs_data, file_not_found = load_game(command, map_size, map, player_state, mobs_data)
         if file_not_found:
             state["file_not_found"] = True
         print("Loading")
@@ -62,7 +69,7 @@ def process_command(command, map_size, region_map_size, map, player_state):
         state['error_msg'] = "Please enter a command"
     state['command'] = command
     print(state)
-    return state, map, player_state
+    return state, map, player_state, mobs_data
 
 
 def process_interact(interact, region_map_size, map_size, region_map, map, player_state, mobs_data):
@@ -83,7 +90,6 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
         # region_map = run_region_gen(region_map_size, region_map_size, current_biome)
         # print("Gen Region Map")
         player_state["region_location"] = [0, 0]
-        # mobs_data = [random.randint(0, region_map_size), random.randint(0, region_map_size), "Chicken"]
     elif interact[:4].lower() == "move":
         player_state, world_change = move_player(interact, map_size, region_map_size, player_state, "Region")
         if world_change:
@@ -95,42 +101,54 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
                 current_biome = map["world_map"][player_state["location"][0]][player_state["location"][1]]
                 biome_data = get_tile_text(current_biome)
                 region_map = run_region_gen(region_map_size, region_map_size, current_biome)
-        # while True:
-        #     random.randint(0, 3)
-            # TODO Make chicken move random
+        mobs_data = move_mobs(mobs_data, region_map_size, map_size)
     else:
         player_state, region_map = collect_resource(interact, player_state, region_map)
     map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"] = region_map
     return region_map, player_state, biome_data, mobs_data
 
 
-# def move_player(move, map_size, player_state, where):
-#     move = move.lower()
-#     if where == "World":
-#         location = player_state['location']
-#     else:
-#         location = player_state['region_location']
-#     if move == "move down":
-#         print("Moving down")
-#         if location[1] < map_size - 1:
-#             location[1] += 1
-#     elif move == "move up":
-#         print("Moving up")
-#         if location[1] > 0:
-#             location[1] -= 1
-#     elif move == "move right":
-#         print("Moving right")
-#         if location[0] < map_size - 1:
-#             location[0] += 1
-#     elif move == "move left":
-#         print("Moving left")
-#         if location[0] > 0:
-#             location[0] -= 1
-#     if where == "World":
-#         player_state["location"] = location
-#     else:
-#         player_state["region_location"] = location
-#     return player_state
+def move_mobs(mobs_data, region_map_size, map_size):
+    for item in mobs_data:
+        data = mobs_data[item]
+        x_world = data["location"][0]
+        y_world = data["location"][1]
+        x_region = data["region_location"][0]
+        y_region = data["region_location"][1]
+        random_number = random.randint(0, 3)
+        if random_number == 0:
+            if y_region < region_map_size - 1:
+                y_region = 1
+            else:
+                if y_world[1] < map_size - 1:
+                    y_world[1] += 1
+                    y_region[1] = 0
+        elif random_number == 1:
+            if x_region < region_map_size - 1:
+                x_region = 1
+            else:
+                if x_world[1] < map_size - 1:
+                    x_world[1] += 1
+                    x_region[1] = 0
+        elif random_number == 2:
+            if x_region > 0:
+                x_region -= 1
+            else:
+                if x_world > 0:
+                    x_world -= 1
+                    x_region = region_map_size - 1
+        elif random_number == 3:
+            if y_region > 0:
+                y_region -= 1
+            else:
+                if y_world > 0:
+                    y_world -= 1
+                    y_region = region_map_size - 1
+        mobs_data[item]["location"] = [x_world, y_world]
+        mobs_data[item]["region_location"] = [x_region, y_region]
+    return mobs_data
+
+
 def move_player(move, map_size, region_map_size, player_state, where):
     world_change = False
     move = move.lower()
@@ -195,6 +213,7 @@ def move_player(move, map_size, region_map_size, player_state, where):
         player_state["location"] = location_world
         player_state["region_location"] = location_region
     return player_state, world_change
+
 
 def collect_resource(interact, player_state, region_map):
     if interact == "Cut Tree":
