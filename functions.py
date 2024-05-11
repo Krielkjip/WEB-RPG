@@ -105,7 +105,31 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
     else:
         player_state, region_map = collect_resource(interact, player_state, region_map)
     map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"] = region_map
-    return region_map, player_state, biome_data, mobs_data
+    # make writable map
+    writable_map = []
+    for y in range(len(region_map)):
+        writable_map_row = []
+        for x in range(len(region_map[y])):
+            tile = region_map[y][x]
+            mob = False
+            print(mobs_data)
+            for item in mobs_data:
+                data = mobs_data[item]
+                if data["location"][0] == player_state["location"][0] and data["location"][1] == \
+                        player_state["location"][1]:
+                    if data["region_location"][0] == x and data["region_location"][1] == y:
+                        print(data)
+                        mob = True
+                        mob_name = data["name"]
+                        break
+            if mob:
+                writable_map_row.append([tile, True, mob_name])
+            else:
+                writable_map_row.append([tile, False, None])
+        writable_map.append(writable_map_row)
+    print(writable_map)
+
+    return writable_map, region_map, player_state, biome_data
 
 
 def move_mobs(mobs_data, region_map_size, map_size):

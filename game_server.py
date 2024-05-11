@@ -67,12 +67,13 @@ async def command(request: Request, command: str = Form(default="")):
 @app.post("/interact")
 async def interact(request: Request, interact: str = Form(default="")):
     global player_state
+    global writable_map
     global region_map
     global mobs_data
-    region_map, player_state, biome_data, mobs_data = process_interact(interact, region_map_size, map_size, region_map, map, player_state, mobs_data)
+    writable_map, region_map, player_state, biome_data = process_interact(interact, region_map_size, map_size, region_map, map, player_state, mobs_data)
     print(player_state)
     return templates.TemplateResponse('game/interact.j2',
-                                      {"request": request, "biome_data": biome_data, "region_map": region_map, "player_state": player_state, "mobs_data": mobs_data})
+                                      {"request": request, "biome_data": biome_data, "region_map": writable_map, "player_state": player_state})
 
 
 @app.get("/")
