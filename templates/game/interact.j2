@@ -164,7 +164,7 @@
     <br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Move Down">↓</button>
 </form>
-
+{# TODO: fix interaction not working#}
 {% set current_tile = writable_map[player_state["region_location"][0]][player_state["region_location"][1]][0] %}
 <form action="/interact" method="POST">
     {% if current_tile == "Tree" %}
