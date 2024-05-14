@@ -86,7 +86,7 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
             region_map = run_region_gen(region_map_size, region_map_size, current_biome)
             # map["region_map"][f"{player_state["location"][0]}_{player_state["location"][1]}"] = region_map
 
-        print(region_map)
+        # print(region_map)
         # region_map = run_region_gen(region_map_size, region_map_size, current_biome)
         # print("Gen Region Map")
         player_state["region_location"] = [0, 0]
@@ -112,13 +112,13 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
         for x in range(len(region_map[y])):
             tile = region_map[y][x]
             mob = False
-            print(mobs_data)
+            # print(mobs_data)
             for item in mobs_data:
                 data = mobs_data[item]
                 if data["location"][0] == player_state["location"][0] and data["location"][1] == \
                         player_state["location"][1]:
                     if data["region_location"][0] == x and data["region_location"][1] == y:
-                        print(data)
+                        # print(data)
                         mob = True
                         mob_name = data["name"]
                         break
@@ -127,12 +127,13 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
             else:
                 writable_map_row.append([tile, False, None])
         writable_map.append(writable_map_row)
-    print(writable_map)
+    # print(writable_map)
 
     return writable_map, region_map, player_state, biome_data
 
 
 def move_mobs(mobs_data, region_map_size, map_size):
+    print(mobs_data)
     for item in mobs_data:
         data = mobs_data[item]
         x_world = data["location"][0]
@@ -142,18 +143,18 @@ def move_mobs(mobs_data, region_map_size, map_size):
         random_number = random.randint(0, 3)
         if random_number == 0:
             if y_region < region_map_size - 1:
-                y_region = 1
+                y_region += 1
             else:
-                if y_world[1] < map_size - 1:
-                    y_world[1] += 1
-                    y_region[1] = 0
+                if y_world < map_size - 1:
+                    y_world += 1
+                    y_region = 0
         elif random_number == 1:
             if x_region < region_map_size - 1:
-                x_region = 1
+                x_region += 1
             else:
-                if x_world[1] < map_size - 1:
-                    x_world[1] += 1
-                    x_region[1] = 0
+                if x_world < map_size - 1:
+                    x_world += 1
+                    x_region = 0
         elif random_number == 2:
             if x_region > 0:
                 x_region -= 1
@@ -170,6 +171,7 @@ def move_mobs(mobs_data, region_map_size, map_size):
                     y_region = region_map_size - 1
         mobs_data[item]["location"] = [x_world, y_world]
         mobs_data[item]["region_location"] = [x_region, y_region]
+    print(mobs_data)
     return mobs_data
 
 

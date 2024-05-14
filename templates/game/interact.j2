@@ -62,6 +62,9 @@
     'Sulfur': {'char': 'S', 'color': 'yellow'},
     'Dirt': {'char': 'D', 'color': 'Peru'}
 } %}
+    {% set type_mobs = {
+    'Chicken': {'char': 'C', 'color': 'GoldenRod'}
+} %}
     <style>
         .grid-item {
             width: 15px;
@@ -105,45 +108,49 @@
                     hiddenTexts[index].style.display = "inline";
                 }
             });
-        }, 1000); // Change the interval (in milliseconds) as needed for faster blinking
+        }, 500); // Change the interval (in milliseconds) as needed for faster blinking
     </script>
-    {% set region_map_size = region_map|length %}
-    {# TODO MAKE PRINTING REGION MAP#}
+    {% set region_map_size = writable_map|length %}
     <table>
         {% for y in range(region_map_size) %}
             <tr>
                 {% for x in range(region_map_size) %}
-                    {% set tile = region_map[y][x][0] %}
-                    {% set found_mob = region_map[y][x][1] %}
-                    {% set type_info = type_region_map[tile] %}
+                    {% set tile = writable_map[y][x][0] %}
+                    {% set found_mob = writable_map[y][x][1] %}
+                    {% set mob = writable_map[y][x][2] %}
+                    {% set type_info_map = type_region_map[tile] %}
+                    {% set type_info_mob = type_mobs[mob] %}
                     {% if found_mob %}
 
                         {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
                             <td class="player">
-                                <span class="blinkingText">C</span>
+                                <span class="blinkingText"
+                                      style="color:{{ type_info_mob['color'] }}">{{ type_info_mob['char'] }}</span>
                                 <span class="hiddenText hidden-letter"
-                                      style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</span>
+                                      style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</span>
                             </td>
                         {% else %}
                             <td class="grid-item">
-                                <span class="blinkingText">C</span>
+                                <span class="blinkingText"
+                                      style="color:{{ type_info_mob['color'] }}">{{ type_info_mob['char'] }}</span>
                                 <span class="hiddenText hidden-letter"
-                                      style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</span>
+                                      style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</span>
                             </td>
 
                         {% endif %}
                     {% else %}
                         {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
-                            <td class="player" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                            <td class="player"
+                                style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</td>
                         {% else %}
-                            <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                            <td class="grid-item"
+                                style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</td>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             </tr>
         {% endfor %}
     </table>
-    {# TODO MAKE PRINTING REGION MAP#}
 {% endif %}
 
 <H2>Controls</H2>
@@ -158,7 +165,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Move Down">↓</button>
 </form>
 
-{% set current_tile = region_map[player_state["region_location"][0]][player_state["region_location"][1]] %}
+{% set current_tile = writable_map[player_state["region_location"][0]][player_state["region_location"][1]][0] %}
 <form action="/interact" method="POST">
     {% if current_tile == "Tree" %}
         <button type="submit" name="interact" value="Cut Tree">Cut Tree</button>
@@ -169,7 +176,7 @@
 
 {{ player_state }}<br/>
 {{ player_state['location'][0] }}<br/>
-{{ region_map }}<br/>
+{{ writable_map }}<br/>
 <hr/>
 {{ mobs_data }}
 </body>
