@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>RuneQuest</title>
     <style>
         html, body {
             height: 100%;
@@ -24,37 +24,103 @@
             border-bottom: 2px solid white;
         }
 
-        .padding {
-            padding-left: 20px;
+        .container {
+            display: flex;
+            flex: 1;
+            height: calc(100% - 82px);
         }
+
+        .box-1, .box-2 {
+            flex: 1;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .box-1 {
+            border-right: 2px solid white;
+        }
+
     </style>
 </head>
 <body>
 <div class="top-bar">
-    <div>
-        <h1>Web RPG</h1>
-    </div>
+    <h1>RuneQuest</h1>
 </div>
 
-<div class="padding">
-    <br/>
-    <form action="/index" method="GET">
-        <input type="hidden" name="command" value="load fresh">
-        <button type="submit">New Game</button>
-    </form>
+<div class="container">
+    <div class="box-1">
+        <h2>About the game</h2>
+        <strong>Title:</strong> RuneQuest<br>
+        <strong>Developer:</strong> Onno te Voortwis<br>
+        <strong>Genre:</strong> 2D Text-Based Grid RPG<br>
+        <strong>Gameplay:</strong> Crafting, Collecting, PvE
+        <p>RuneQuest, developed by Onno te Voortwis, is a captivating 2D text-based RPG set in a dynamically generated
+            grid world. Players are immersed in a realm where strategic exploration, extensive crafting, resource
+            collection, and thrilling PvE battles intertwine to create a richly detailed and engaging adventure.
 
-    <br/>
-    <h2>Save files:</h2>
-    <ul>
-        {% for item in items %}
+        <h2>Gameplay Mechanics</h2>
+        <ol>
             <li>
-                <form action="/index" method="GET">
-                    <input type="hidden" name="command" value="load {{ item }}">
-                    <button type="submit">{{ item[:-5] }}</button>
-                </form>
+                <h3>Grid-Based Exploration:</h3>
+                <ul>
+                    <li><strong>Grid Movement:</strong> The game world is divided into a grid, with each cell
+                        representing different terrain types, resources, or challenges. Players navigate the grid using
+                        text commands (e.g., "move north", "move east"), or use the buttons to move.
+                    </li>
+                    <li><strong>Dynamic Environments:</strong> Each cell can host forests, mountains, lakes, dungeons,
+                        or villages, offering a diverse landscape to explore.
+                    </li>
+                </ul>
             </li>
-        {% endfor %}
-    </ul>
+            <li>
+                <h3>Resource Collection:</h3>
+                <ul>
+                    <li><strong>Gathering:</strong> Players collect resources by moving into specific cells. Forests may
+                        yield wood, mountains provide ores, and lakes offer fish and water.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Crafting System:</h3>
+                <ul>
+                    <li><strong>Recipes and Blueprints:</strong> Players can craft tools, weapons, armor, and various
+                        items using collected resources.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Player vs Environment (PvE):</h3>
+                <ul>
+                    <li><strong>Combat Encounters:</strong> Engage in turn-based battles against various enemies, from
+                        wild beasts to mythical creatures. Strategic use of weapons, skills, and items is crucial for
+                        victory.
+                    </li>
+                </ul>
+            </li>
+
+        </ol>
+    </div>
+
+    <div class="box-2">
+        <h2>Start a New Game</h2>
+        <form action="/index" method="GET">
+            <input type="hidden" name="command" value="load fresh">
+            <button type="submit">New Game</button>
+        </form>
+
+        <br/>
+        <h2>Save files:</h2>
+        <ul>
+            {% for item in items %}
+                <li>
+                    <form action="/index" method="GET">
+                        <input type="hidden" name="command" value="load {{ item }}">
+                        <button type="submit">{{ item[:-5] }}</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 </body>
 </html>
