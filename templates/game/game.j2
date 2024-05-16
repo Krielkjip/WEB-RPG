@@ -52,7 +52,20 @@
             margin-left: auto;
         }
 
-        .padding {
+        .container {
+            display: flex;
+            flex: 1;
+            height: calc(100% - 82px);
+        }
+
+        .box-1 {
+            flex: 1;
+            padding-left: 20px;
+            border-right: 2px solid white;
+        }
+
+        .box-2 {
+            flex: 1;
             padding-left: 20px;
         }
     </style>
@@ -73,19 +86,13 @@
     </div>
 </div>
 
-<div class="padding">
-    <br/>
-    {#<ul>#}
-    {#    {% for key in state %}#}
-    {#        <li><strong>{{ key }}</strong>: {{ state[key] }}</li>#}
-    {#    {% endfor %}#}
-    {#</ul>#}
-
-
-    {% if map is none %}
-        <p>Map is null</p>
-    {% else %}
-        {% set type_map = {'Taiga': {'char': 'T', 'color': 'white'},
+<div class="container">
+    <div class="box-1">
+        <br/>
+        {% if map is none %}
+            <p>Map is null</p>
+        {% else %}
+            {% set type_map = {'Taiga': {'char': 'T', 'color': 'white'},
                       'Rainforest': {'char': 'R', 'color': 'forestgreen'},
                       'Grassland': {'char': 'G', 'color': 'lightgreen'},
                       'Mountain': {'char': 'M', 'color': 'gray'},
@@ -98,85 +105,88 @@
                       'Taiga Forest': {'char': 'F', 'color': 'white'},
                       'Savanna': {'char': 'S', 'color': 'khaki'}} %}
 
-        <style>
-            .grid-item {
-                width: 15px;
-                height: 15px;
-                padding: 5px; /* Adjust padding as needed */
-                font-weight: bold;
-                border: 2px solid black; /* Add border for table cells */
-                text-align: center; /* Center align content */
-            }
+            <style>
+                .grid-item {
+                    width: 15px;
+                    height: 15px;
+                    padding: 5px;
+                    font-weight: bold;
+                    border: 2px solid black;
+                    text-align: center;
+                }
 
-            .player {
-                width: 15px;
-                height: 15px;
-                background-color: rgba(255, 255, 255, 0.2);
-                border: 3px solid yellow;
-                font-weight: bold;
-                text-align: center;
-                padding: 2px;
-            }
+                .player {
+                    width: 15px;
+                    height: 15px;
+                    background-color: rgba(255, 255, 255, 0.2);
+                    border: 3px solid yellow;
+                    font-weight: bold;
+                    text-align: center;
+                    padding: 2px;
+                }
 
-            table {
-                border-collapse: collapse; /* Collapse table borders */
-            }
-        </style>
-        {% set map_size = map|length %}
-        <table>
-            {% for y in range(map_size) %}
-                <tr>
-                    {% for x in range(map_size) %}
-                        {% set item = map[x][y] %}
-                        {% set type_info = type_map[item] %}
-                        {% if player_state["location"][0] == x and player_state["location"][1] == y %}
-                            {#                <td class="grid-item player" style="color: yellow">X</td>#}
-                            <td class="player" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
-                        {% else %}
-                            <td class="grid-item" style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+                table {
+                    border-collapse: collapse;
+                }
+            </style>
+            {% set map_size = map|length %}
+            <table>
+                {% for y in range(map_size) %}
+                    <tr>
+                        {% for x in range(map_size) %}
+                            {% set item = map[x][y] %}
+                            {% set type_info = type_map[item] %}
+                            {% if player_state["location"][0] == x and player_state["location"][1] == y %}
+                                <td class="player"
+                                    style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                            {% else %}
+                                <td class="grid-item"
+                                    style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
 
+    <div class="box-2">
+        {% if state.error_msg %}
+            <br/>
+            <div class="error">
+                <span class="error-icon">&#9888;</span>{{ state.error_msg }}
+            </div>
+            <br>
+        {% endif %}
+        {% if state.file_not_found %}
+            <br/>
+            <div class="error">
+                <span class="error-icon">&#9888;</span>file:{{ state.command[5:] }} not found
+            </div>
+            <br>
+        {% endif %}
 
-
-    {% if state.error_msg %}
-        <div class="error">
-            <span class="error-icon">&#9888;</span>{{ state.error_msg }}
-        </div>
-        <br><br>
-    {% endif %}
-    {% if state.file_not_found %}
-        <div class="error">
-            <span class="error-icon">&#9888;</span>file:{{ state.command[5:] }} not found
-        </div>
-        <br><br>
-    {% endif %}
-
-    <h2>Send Command</h2>
-    <form action="/index" method="POST">
-        <label for="command">Enter command:</label><br>
-        <input type="text" id="command" name="command" autofocus><br><br>
-        <input type="submit" value="Submit">
-    </form>
-    <H2>Controls</H2>
-    <form action="/index" method="POST">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Up">↑</button>
+        <h2>Send Command</h2>
+        <form action="/index" method="POST">
+            <label for="command">Enter command:</label><br>
+            <input type="text" id="command" name="command" autofocus><br><br>
+            <input type="submit" value="Submit">
+        </form>
+        <H2>Controls</H2>
+        <form action="/index" method="POST">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Up">↑</button>
+            <br>
+            <button type="submit" name="command" value="Move Left">←</button>
+            <button type="submit" name="command" value="Move Right">→</button>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Down">↓</button>
+        </form>
         <br>
-        <button type="submit" name="command" value="Move Left">←</button>
-        <button type="submit" name="command" value="Move Right">→</button>
-        <br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Down">↓</button>
-    </form>
-    <br>
-    <form action="/interact" method="POST">
-        <button type="submit" name="interact" value="Interact Get Region">Interact</button>
-    </form>
-    <button onclick="location.href='/inventory'">Inventory</button>
+        <form action="/interact" method="POST">
+            <button type="submit" name="interact" value="Interact Get Region">Interact</button>
+        </form>
+        <button onclick="location.href='/inventory'">Inventory</button>
+    </div>
 </div>
-{{ state }}
 </body>
 </html>
