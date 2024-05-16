@@ -47,8 +47,8 @@ def load_game(command, map_size, map, player_state, mobs_data):
             with open(file_location, 'r') as json_file:
                 data = json.load(json_file)
                 map = data[0]
-                player_state = data[1]
-                mobs_data = data[2]
+                player_state = data[2]
+                mobs_data = data[1]
                 return map, player_state, mobs_data, False
         except FileNotFoundError:
             return map, player_state, mobs_data, True

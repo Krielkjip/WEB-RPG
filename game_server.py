@@ -45,8 +45,7 @@ async def command(request: Request, command: str):
     print(command)
     state, map, player_state, mobs_data = process_command(command, map_size, region_map_size, map, player_state, mobs_data)
     world_map = map["world_map"]
-    print(player_state["location"])
-    print(player_state["location"])
+    print(player_state)
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map, "state": {}})
 
@@ -59,6 +58,7 @@ async def command(request: Request, command: str = Form(default="")):
     print(command)
     state, map, player_state, mobs_data = process_command(command, map_size, region_map_size, map, player_state, mobs_data)
     world_map = map["world_map"]
+    print(player_state)
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map, "state": state})
 
