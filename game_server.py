@@ -1,12 +1,11 @@
 import os
 from pathlib import Path
-import time
 
 import uvicorn
 from fastapi import FastAPI, Request, Form
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 
 from functions import *
@@ -74,6 +73,10 @@ async def interact(request: Request, interact: str = Form(default="")):
     print(player_state)
     return templates.TemplateResponse('game/interact.j2',
                                       {"request": request, "biome_data": biome_data, "writable_map": writable_map, "player_state": player_state})
+
+@app.post("/inventory")
+async def inventory(request: Request):
+    return templates.TemplateResponse('game/inventory.j2', {'request': request})
 
 
 @app.get("/")
