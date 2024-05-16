@@ -76,11 +76,13 @@ async def interact(request: Request, interact: str = Form(default="")):
 
 @app.post("/inventory")
 async def inventory(request: Request):
-    return templates.TemplateResponse('game/inventory.j2', {'request': request})
+    global player_state
+    return templates.TemplateResponse('game/inventory.j2', {'request': request, "player_state": player_state})
 
 @app.get("/inventory")
 async def inventory(request: Request):
-    return templates.TemplateResponse('game/inventory.j2', {'request': request})
+    global player_state
+    return templates.TemplateResponse('game/inventory.j2', {'request': request, "player_state": player_state})
 
 @app.get("/")
 async def root(request: Request):

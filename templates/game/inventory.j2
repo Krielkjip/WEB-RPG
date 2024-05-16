@@ -53,6 +53,14 @@
     </div>
     <div class="box-2">
         <h2>Items</h2>
+        <ul>
+            {% for item in player_state["inventory"] %}
+                <li>
+                    {{ player_state["inventory"][item] }}x
+                    {{ item[:-7] }}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 </body>
