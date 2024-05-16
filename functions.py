@@ -14,7 +14,11 @@ def create_map():
 
 
 def save_game(command, map, player_state, mobs_data):
-    file_location = "save_data/" + command[5:] + ".json"
+    if command[-5:] == ".json":
+        file_location = "save_data/" + command[5:]
+    else:
+        file_location = "save_data/" + command[5:] + ".json"
+    print
     with open(file_location, 'w') as json_file:
         json.dump([map, mobs_data, player_state], json_file)
         print("SAVED DATA")
@@ -54,13 +58,23 @@ def load_game(command, map_size, map, player_state, mobs_data):
             return map, player_state, mobs_data, True
 
 
-def process_command(command, map_size, region_map_size, map, player_state, mobs_data):
+def process_command(command, map_size, region_map_size, map, player_state, mobs_data, save_location):
     player_state, world_change = move_player(command, map_size, region_map_size, player_state, "World")
     state = {"command_len": len(command)}
     if command[:4].lower() == "save":
-        save_game(command, map, player_state, mobs_data)
-        print("Saving")
+        save_location = command[5:]
+        if save_location == "":
+            state["error_msg"] = "Please enter save name"
+        else:
+            save_game(command, map, player_state, mobs_data)
+            print("Saving")
     elif command[:4].lower() == "load":
+        if command == "load current":
+            pass
+        elif command == "load fresh":
+            save_location = ""
+        else:
+            save_location = command[5:]
         map, player_state, mobs_data, file_not_found = load_game(command, map_size, map, player_state, mobs_data)
         if file_not_found:
             state["file_not_found"] = True
@@ -69,7 +83,7 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
         state['error_msg'] = "Please enter a command"
     state['command'] = command
     print(state)
-    return state, map, player_state, mobs_data
+    return state, map, player_state, mobs_data, save_location
 
 
 def process_interact(interact, region_map_size, map_size, region_map, map, player_state, mobs_data):

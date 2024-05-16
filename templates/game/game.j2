@@ -43,6 +43,15 @@
             border-bottom: 2px solid white;
         }
 
+        .top-bar .buttons-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-bar button {
+            margin-left: auto;
+        }
+
         .padding {
             padding-left: 20px;
         }
@@ -53,7 +62,15 @@
     <div>
         <h1>World Map</h1>
     </div>
-    <button onclick="location.href='/'">Home</button>
+    <div class="buttons-container">
+        {% if save_location != "" %}
+            <form action="/index" method="POST">
+                <button type="submit" name="command" value="save {{ save_location }}">Save
+                    to: {{ save_location }}</button>
+            </form>
+        {% endif %}
+        <button onclick="location.href='/'">Home</button>
+    </div>
 </div>
 
 <div class="padding">
@@ -160,5 +177,6 @@
     </form>
     <button onclick="location.href='/inventory'">Inventory</button>
 </div>
+{{ state }}
 </body>
 </html>
