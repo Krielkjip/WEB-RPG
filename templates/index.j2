@@ -10,7 +10,7 @@
         }
 
         body {
-            background-color: #0d183a;
+            background-color: #18191a;
             color: white;
         }
 
@@ -20,7 +20,7 @@
             align-items: center;
             padding-left: 20px;
             padding-right: 20px;
-            background-color: #1c2b5a;
+            background-color: #3c1178;
             border-bottom: 2px solid white;
         }
 
@@ -40,6 +40,15 @@
             border-right: 2px solid white;
         }
 
+        .button_purple {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #3c1178;
+            color: white;
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -67,8 +76,8 @@
                         representing different terrain types, resources, or challenges. Players navigate the grid using
                         text commands (e.g., "move north", "move east"), or use the buttons to move.
                     </li>
-                    <li><strong>Dynamic Environments:</strong> Each cell can host forests, mountains, lakes, dungeons,
-                        or villages, offering a diverse landscape to explore.
+                    <li><strong>Dynamic Environments:</strong> Each cell can host forests, mountains, lakes, offering a
+                        diverse landscape to explore.
                     </li>
                 </ul>
             </li>
@@ -76,7 +85,7 @@
                 <h3>Resource Collection:</h3>
                 <ul>
                     <li><strong>Gathering:</strong> Players collect resources by moving into specific cells. Forests may
-                        yield wood, mountains provide ores, and lakes offer fish and water.
+                        yield wood, mountains provide ores.
                     </li>
                 </ul>
             </li>
@@ -91,9 +100,7 @@
             <li>
                 <h3>Player vs Environment (PvE):</h3>
                 <ul>
-                    <li><strong>Combat Encounters:</strong> Engage in turn-based battles against various enemies, from
-                        wild beasts to mythical creatures. Strategic use of weapons, skills, and items is crucial for
-                        victory.
+                    <li><strong>Combat Encounters:</strong> Players Fight mobs by moving on top of them. Mobs can be found in every biome.
                     </li>
                 </ul>
             </li>
@@ -105,7 +112,7 @@
         <h2>Start a New Game</h2>
         <form action="/index" method="GET">
             <input type="hidden" name="command" value="load fresh">
-            <button type="submit">New Game</button>
+            <button class="button_purple" type="submit">New Game</button>
         </form>
 
         <br/>
@@ -115,7 +122,7 @@
                 <li>
                     <form action="/index" method="GET">
                         <input type="hidden" name="command" value="load {{ item }}">
-                        <button type="submit">{{ item[:-5] }}</button>
+                        <button class="button_purple" type="submit">{{ item[:-5] }}</button>
                     </form>
                 </li>
             {% endfor %}

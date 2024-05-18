@@ -10,7 +10,7 @@
         }
 
         body {
-            background-color: #0d183a;
+            background-color: #18191a;
             color: white;
         }
 
@@ -36,7 +36,7 @@
             align-items: center;
             padding-left: 20px;
             padding-right: 20px;
-            background-color: #1c2b5a;
+            background-color: #3c1178;
             border-bottom: 2px solid white;
         }
 
@@ -54,12 +54,44 @@
         .box-1 {
             border-right: 2px solid white;
         }
+
+        .button_purple {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #3c1178;
+            color: white;
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
+
+        .button_move {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #3c1178;
+            color: white;
+            margin-bottom: 4px;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        .button_gray {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #18191a;
+            color: white;
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
 <div class="top-bar">
     <h1>Interact</h1>
-    <button onclick="location.href='/index?command=load current'">Back to map</button>
+    <button class="button_gray" onclick="location.href='/index?command=load current'">Back to map</button>
 </div>
 
 <div class="container">
@@ -193,20 +225,24 @@
     <div class="box-2">
         <H2>Controls</H2>
         <form action="/interact" method="POST">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Move Up">↑</button>
+            <button class="button_move" style="margin-left: 44px;" type="submit" name="interact" value="Move Up">
+                ↑
+            </button>
             <br>
-            <button type="submit" name="interact" value="Move Left">←</button>
-            <button type="submit" name="interact" value="Move Right">→</button>
+            <button class="button_move" type="submit" name="interact" value="Move Left">←</button>
+            <button class="button_move" style="margin-left: 44px;" type="submit" name="interact" value="Move Right">→</button>
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="interact" value="Move Down">↓</button>
+            <button class="button_move" style="margin-left: 44px;" type="submit" name="interact" value="Move Down">
+                ↓
+            </button>
         </form>
         <br>
         {% set current_tile = writable_map[player_state["region_location"][1]][player_state["region_location"][0]][0] %}
         <form action="/interact" method="POST">
             {% if current_tile == "Tree" %}
-                <button type="submit" name="interact" value="Cut Tree">Cut Tree</button>
+                <button class="button_purple" type="submit" name="interact" value="Cut Tree">Cut Tree</button>
             {% elif current_tile == "Rock" %}
-                <button type="submit" name="interact" value="Mine Rock">Mine Rock</button>
+                <button class="button_purple" type="submit" name="interact" value="Mine Rock">Mine Rock</button>
             {% endif %}
         </form>
     </div>

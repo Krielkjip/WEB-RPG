@@ -12,7 +12,7 @@
 
 
         body {
-            background-color: #0d183a;
+            background-color: #18191a;
             color: white;
         }
 
@@ -40,7 +40,7 @@
             align-items: center;
             padding-left: 20px;
             padding-right: 20px;
-            background-color: #1c2b5a;
+            background-color: #3c1178;
             border-bottom: 2px solid white;
         }
 
@@ -77,17 +77,18 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         .modal-content {
-            background-color: #0d183a;
+            background-color: #3c1178;
             margin: 15% auto;
             padding: 20px;
             border: 2px solid white;
             width: 80%;
             max-width: 500px;
             text-align: center;
+            border-radius: 5px;
         }
 
         .close {
@@ -103,6 +104,38 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        .button_purple {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #3c1178;
+            color: white;
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
+
+        .button_move {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #3c1178;
+            color: white;
+            margin-bottom: 4px;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        .button_gray {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #18191a;
+            color: white;
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -111,11 +144,11 @@
     <div class="buttons-container">
         {% if save_location != "" %}
             <form action="/index" method="POST">
-                <button type="submit" name="command" value="save {{ save_location }}">Save
+                <button class="button_gray" type="submit" name="command" value="save {{ save_location }}">Save
                     to: {{ save_location }}</button>
             </form>
         {% endif %}
-        <button id="openModalBtn">Quit Game</button>
+        <button class="button_gray" id="openModalBtn">Quit Game</button>
 
         <div id="myModal" class="modal">
             <div class="modal-content">
@@ -125,19 +158,21 @@
                     <form id="saveForm" action="/index" method="POST">
                         <input type="hidden" name="command" value="save {{ save_location }}">
                     </form>
-                    <button style="margin-right: 20px" onclick="saveAndRedirect()">Quit With Saving</button>
-                    {% else %}
+                    <button class="button_gray" style="margin-right: 20px" onclick="saveAndRedirect()">Quit With
+                        Saving
+                    </button>
+                {% else %}
                     <p>Save your game with the "save (your game name)" command before easy save is available</p>
                 {% endif %}
 
-                <button onclick="location.href='/'">Quit Without Saving</button>
+                <button class="button_gray" onclick="location.href='/'">Quit Without Saving</button>
             </div>
         </div>
     </div>
 </div>
 <div class="container">
     <div class="box-1">
-        <br/>
+        <h2>World Map</h2>
 
         {% if map is none %}
             <p>Map is null</p>
@@ -219,45 +254,48 @@
         <h2>Send Command</h2>
         <form action="/index" method="POST">
             <label for="command">Enter command:</label><br>
-            <input type="text" id="command" name="command" autofocus><br><br>
-            <input type="submit" value="Submit">
+            <input class="button_purple" type="text" id="command" name="command" autofocus><br><br>
+            <input class="button_purple" type="submit" value="Submit">
         </form>
         <H2>Controls</H2>
         <form action="/index" method="POST">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Up">↑</button>
+            <button class="button_move" style="margin-left: 44px;" type="submit" name="command" value="Move Up">↑
+            </button>
             <br>
-            <button type="submit" name="command" value="Move Left">←</button>
-            <button type="submit" name="command" value="Move Right">→</button>
+            <button class="button_move" type="submit" name="command" value="Move Left">←</button>
+            <button class="button_move" style="margin-left: 44px;" type="submit" name="command" value="Move Right">→
+            </button>
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="command" value="Move Down">↓</button>
+            <button class="button_move" style="margin-left: 44px;" type="submit" name="command" value="Move Down">↓
+            </button>
         </form>
         <br>
         <form action="/interact" method="POST">
-            <button type="submit" name="interact" value="Interact Get Region">Interact</button>
+            <button class="button_purple" type="submit" name="interact" value="Interact Get Region">Interact</button>
         </form>
-        <button onclick="location.href='/inventory'">Inventory</button>
+        <button class="button_purple" onclick="location.href='/inventory'">Inventory</button>
     </div>
 </div>
 </body>
 <script>
-        function saveAndRedirect() {
-            const form = document.getElementById('saveForm');
-            const formData = new FormData(form);
+    function saveAndRedirect() {
+        const form = document.getElementById('saveForm');
+        const formData = new FormData(form);
 
-            fetch('/index', {
-                method: 'POST',
-                body: formData
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = '/';
-                } else {
-                    alert('Save failed!');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
+        fetch('/index', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
                 alert('Save failed!');
-            });
-        }
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Save failed!');
+        });
+    }
 
     // Get the modal
     const modal = document.getElementById("myModal");

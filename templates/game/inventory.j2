@@ -10,7 +10,7 @@
         }
 
         body {
-            background-color: #0d183a;
+            background-color: #18191a;
             color: white;
         }
 
@@ -20,7 +20,7 @@
             align-items: center;
             padding-left: 20px;
             padding-right: 20px;
-            background-color: #1c2b5a;
+            background-color: #3c1178;
             border-bottom: 2px solid white;
         }
 
@@ -47,7 +47,7 @@
         .description {
             display: none;
             width: 100px;
-            background-color: #1c2b5a;
+            background-color: #3c1178;
             color: white;
             text-align: center;
             border: 2px solid white;
@@ -56,19 +56,32 @@
             bottom: calc(100% - 2px); /* Position above the button */
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 8);
+            border-radius: 5px;
         }
 
         .button-container:hover .description {
             display: block;
         }
 
-        .button {
-            padding: 10px 20px;
+        .button_purple {
+            padding: 10px;
             cursor: pointer;
-            border: 2px solid white;
-            background-color: #1c2b5a;
+            border: 1px solid white;
+            background-color: #3c1178;
             color: white;
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
+
+        .button_gray {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background-color: #18191a;
+            color: white;
+            margin-bottom: 4px;
+            border-radius: 5px;
         }
 
         p {
@@ -80,7 +93,7 @@
 <body>
 <div class="top-bar">
     <h1>Process Resource</h1>
-    <button onclick="location.href='/index?command=load current'">Back to map</button>
+    <button class="button_gray" onclick="location.href='/index?command=load current'">Back to map</button>
 </div>
 
 <div class="container">
@@ -90,13 +103,13 @@
 
         <h3>Resources and Materials</h3>
         <div class="button-container">
-            <button class="button">4x Planks</button>
+            <button class="button_purple">4x Planks</button>
             <div class="description">
                 <p>1x Logs</p>
             </div>
         </div>
         <div class="button-container">
-            <button class="button">4x Sticks</button>
+            <button class="button_purple">4x Sticks</button>
             <div class="description">
                 <p>2x Planks</p>
             </div>
@@ -104,14 +117,14 @@
 
         <h3>Tools and Equipment</h3>
         <div class="button-container">
-            <button class="button">10x Wooden Pickaxe Uses</button>
+            <button class="button_purple">10x Wooden Pickaxe Uses</button>
             <div class="description">
                 <p>3x Planks</p>
                 <p>2x Sticks</p>
             </div>
         </div>
         <div class="button-container">
-            <button class="button">10x Wooden Axe Uses</button>
+            <button class="button_purple">10x Wooden Axe Uses</button>
             <div class="description">
                 <p>3x Planks</p>
                 <p>2x Sticks</p>
@@ -119,14 +132,14 @@
         </div>
         <br/>
         <div class="button-container">
-            <button class="button">10x Stone Pickaxe Uses</button>
+            <button class="button_purple">10x Stone Pickaxe Uses</button>
             <div class="description">
                 <p>3x Rocks</p>
                 <p>2x Sticks</p>
             </div>
         </div>
         <div class="button-container">
-            <button class="button">10x Stone Axe Uses</button>
+            <button class="button_purple">10x Stone Axe Uses</button>
             <div class="description">
                 <p>3x Rocks</p>
                 <p>2x Sticks</p>
@@ -135,7 +148,7 @@
 
         <h3>Weapons and Armor</h3>
         <div class="button-container">
-            <button class="button">NONE</button>
+            <button class="button_purple">NONE</button>
             <div class="description">
                 <p>NONE</p>
             </div>
@@ -143,7 +156,7 @@
 
         <h3>Foods and Drinks</h3>
         <div class="button-container">
-            <button class="button">NONE</button>
+            <button class="button_purple">NONE</button>
             <div class="description">
                 <p>NONE</p>
             </div>
@@ -151,7 +164,7 @@
 
         <h3>Medical Supplies</h3>
         <div class="button-container">
-            <button class="button">NONE</button>
+            <button class="button_purple">NONE</button>
             <div class="description">
                 <p>NONE</p>
             </div>
