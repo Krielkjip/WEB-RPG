@@ -18,7 +18,6 @@ def save_game(command, map, player_state, mobs_data):
         file_location = "save_data/" + command[5:]
     else:
         file_location = "save_data/" + command[5:] + ".json"
-    print
     with open(file_location, 'w') as json_file:
         json.dump([map, mobs_data, player_state], json_file)
         print("SAVED DATA")

@@ -1,12 +1,22 @@
 # WEB-RPG
 
-### Create a Virtual Environment
+### Create a Virtual Environment (python 3.12)
 
 Run below or yous your IDE to create a venv, 
 make sure to select it.
 
 ```bash
 python -m venv venv
+```
+
+### Windows
+```bash
+python3.12.exe -m venv venv
+```
+
+### Activate Virtual Environment
+```bash
+.\venv\Scripts\activate
 ```
 
 ### Install Dependencies
