@@ -23,15 +23,20 @@ def save_game(command, map, player_state, mobs_data):
         print("SAVED DATA")
 
 
-def load_game(command, map_size, map, player_state, mobs_data):
+def load_game(command, map_size, region_map_size, map, player_state, mobs_data):
     if command == "load current":
         return map, player_state, mobs_data, False
     elif command == "load fresh":
         player_state = create_player_state()
-        mobs_data = {
-            "0": {"name": "Chicken", "location": [0, 0], "region_location": [2, 2]},
-            "1": {"name": "Chicken", "location": [0, 0], "region_location": [5, 5]}
-        }
+        mobs_data = {}
+        mob_id = 0
+        for x in range(map_size):
+            for y in range(map_size):
+                random_x = random.randint(0, region_map_size - 1)
+                random_y = random.randint(0, region_map_size - 1)
+                mobs_data[mob_id] = {"name": "Chicken", "location": [x, y], "region_location": [random_x, random_y]}
+                mob_id += 1
+        print(mobs_data)
         map = create_map()
         map["world_map"] = run_world_gen(map_size, map_size)
         # for x in range(map_size):
@@ -74,7 +79,7 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
             save_location = ""
         else:
             save_location = command[5:]
-        map, player_state, mobs_data, file_not_found = load_game(command, map_size, map, player_state, mobs_data)
+        map, player_state, mobs_data, file_not_found = load_game(command, map_size, region_map_size, map, player_state, mobs_data)
         if file_not_found:
             state["file_not_found"] = True
         print("Loading")
