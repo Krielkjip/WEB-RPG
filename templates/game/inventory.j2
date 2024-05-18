@@ -38,6 +38,43 @@
         .box-1 {
             border-right: 2px solid white;
         }
+
+        .button-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .description {
+            display: none;
+            width: 100px;
+            background-color: #1c2b5a;
+            color: white;
+            text-align: center;
+            border: 2px solid white;
+            padding: 5px;
+            position: absolute;
+            bottom: calc(100% - 2px); /* Position above the button */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container:hover .description {
+            display: block;
+        }
+
+        .button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 2px solid white;
+            background-color: #1c2b5a;
+            color: white;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -45,9 +82,82 @@
     <h1>Process Resource</h1>
     <button onclick="location.href='/index?command=load current'">Back to map</button>
 </div>
+
 <div class="container">
     <div class="box-1">
+
         <h2>Craft</h2>
+
+        <h3>Resources and Materials</h3>
+        <div class="button-container">
+            <button class="button">4x Planks</button>
+            <div class="description">
+                <p>1x Logs</p>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="button">4x Sticks</button>
+            <div class="description">
+                <p>2x Planks</p>
+            </div>
+        </div>
+
+        <h3>Tools and Equipment</h3>
+        <div class="button-container">
+            <button class="button">10x Wooden Pickaxe Uses</button>
+            <div class="description">
+                <p>3x Planks</p>
+                <p>2x Sticks</p>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="button">10x Wooden Axe Uses</button>
+            <div class="description">
+                <p>3x Planks</p>
+                <p>2x Sticks</p>
+            </div>
+        </div>
+        <br/>
+        <div class="button-container">
+            <button class="button">10x Stone Pickaxe Uses</button>
+            <div class="description">
+                <p>3x Rocks</p>
+                <p>2x Sticks</p>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="button">10x Stone Axe Uses</button>
+            <div class="description">
+                <p>3x Rocks</p>
+                <p>2x Sticks</p>
+            </div>
+        </div>
+
+        <h3>Weapons and Armor</h3>
+        <div class="button-container">
+            <button class="button">NONE</button>
+            <div class="description">
+                <p>NONE</p>
+            </div>
+        </div>
+
+        <h3>Foods and Drinks</h3>
+        <div class="button-container">
+            <button class="button">NONE</button>
+            <div class="description">
+                <p>NONE</p>
+            </div>
+        </div>
+
+        <h3>Medical Supplies</h3>
+        <div class="button-container">
+            <button class="button">NONE</button>
+            <div class="description">
+                <p>NONE</p>
+            </div>
+        </div>
+
+
     </div>
     <div class="box-2">
         <h2>Items</h2>
