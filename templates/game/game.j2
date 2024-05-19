@@ -127,6 +127,19 @@
             gap: 10px;
             align-items: center;
         }
+
+        #hover-text {
+            display: none;
+            position: absolute;
+            background-color: #3c1178;
+            border: 1px solid white;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: white;
+            pointer-events: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -165,6 +178,19 @@
 
 <div class="container">
     <div class="box-1">
+
+        <table>
+            <tr>
+                <td class="tile" data-text="Tile 1 Info">Tile 1</td>
+                <td class="tile" data-text="Tile 2 Info">Tile 2</td>
+            </tr>
+            <tr>
+                <td class="tile" data-text="Tile 3 Info">Tile 3</td>
+                <td class="tile" data-text="Tile 4 Info">Tile 4</td>
+            </tr>
+        </table>
+        <div id="hover-text"></div>
+
 
         <h2>World Map</h2>
 
@@ -216,11 +242,13 @@
                             {% set item = map[x][y] %}
                             {% set type_info = type_map[item] %}
                             {% if player_state["location"][0] == x and player_state["location"][1] == y %}
-                                <td class="player"
-                                    style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                                <td class="player tile"
+                                    style="color:{{ type_info['color'] }}" data-text="{{ item }}">{{ type_info['char'] }}
+                                </td>
                             {% else %}
-                                <td class="grid-item"
-                                    style="color:{{ type_info['color'] }}">{{ type_info['char'] }}</td>
+                                <td class="grid-item tile"
+                                    style="color:{{ type_info['color'] }}" data-text="{{ item }}">{{ type_info['char'] }}
+                                </td>
                             {% endif %}
                         {% endfor %}
                     </tr>
@@ -357,5 +385,20 @@
     spanHelp.onclick = function () {
         modalHelp.style.display = "none";
     }
+
+    const tiles = document.querySelectorAll('.tile');
+    const hoverText = document.getElementById('hover-text');
+
+    tiles.forEach(tile => {
+        tile.addEventListener('mousemove', (e) => {
+            hoverText.textContent = tile.getAttribute('data-text');
+            hoverText.style.display = 'block';
+            hoverText.style.left = `${e.pageX + 10}px`;
+            hoverText.style.top = `${e.pageY + 10}px`;
+        });
+        tile.addEventListener('mouseout', () => {
+            hoverText.style.display = 'none';
+        });
+    });
 </script>
 </html>
