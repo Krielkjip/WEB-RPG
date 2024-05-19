@@ -49,9 +49,6 @@ async def command(request: Request, command: str):
                                                                          player_state, mobs_data, save_location)
     world_map = map["world_map"]
     print(player_state)
-    print(save_location)
-    print(save_location)
-    print(save_location)
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map,
                                        "state": state, "save_location": save_location})
@@ -68,9 +65,6 @@ async def command(request: Request, command: str = Form(default="")):
                                                                          player_state, mobs_data, save_location)
     world_map = map["world_map"]
     print(player_state)
-    print(save_location)
-    print(save_location)
-    print(save_location)
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map,
                                        "state": state, "save_location": save_location})

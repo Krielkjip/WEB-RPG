@@ -63,13 +63,15 @@ def load_game(command, map_size, region_map_size, map, player_state, mobs_data):
 
 
 def process_command(command, map_size, region_map_size, map, player_state, mobs_data, save_location):
+    command = command.lower()
+    command = command.strip()
     player_state, world_change = move_player(command, map_size, region_map_size, player_state, "World")
     state = {"command_len": len(command)}
-    if command[:4].lower() == "save":
-        save_location = command[5:]
-        if save_location == "":
+    if command[:4] == "save":
+        if command[5:].strip() == "":
             state["error_msg"] = "Please enter save name"
         else:
+            save_location = command[5:]
             save_game(command, map, player_state, mobs_data)
             print("Saving")
     elif command[:4].lower() == "load":
