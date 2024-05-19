@@ -10,7 +10,6 @@
             margin: 0;
         }
 
-
         body {
             background-color: #18191a;
             color: white;
@@ -122,6 +121,12 @@
             margin-bottom: 4px;
             border-radius: 5px;
         }
+
+        .commands-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -150,14 +155,17 @@
                     <p>Save your game with the "save (your game name)" command before easy save is available</p>
                 {% endif %}
 
-                <button class="button_gray" style="margin-right: 20px" onclick="location.href='/'">Quit Without Saving</button>
+                <button class="button_gray" style="margin-right: 20px" onclick="location.href='/'">Quit Without Saving
+                </button>
                 <span class="close button_gray">Cancel</span>
             </div>
         </div>
     </div>
 </div>
+
 <div class="container">
     <div class="box-1">
+
         <h2>World Map</h2>
 
         {% if map is none %}
@@ -237,13 +245,13 @@
             <br>
         {% endif %}
 
-        <h2>Send Command</h2>
+        <h2>Send Text Command</h2>
         <form action="/index" method="POST">
             <label for="command">Enter command:</label><br>
             <input class="button_purple" type="text" id="command" name="command" autofocus><br><br>
             <input class="button_purple" type="submit" value="Submit">
         </form>
-        <H2>Controls</H2>
+        <H2>Move</H2>
         <form action="/index" method="POST">
             <button class="button_move" style="margin-left: 44px;" type="submit" name="command" value="Move Up">↑
             </button>
@@ -255,11 +263,40 @@
             <button class="button_move" style="margin-left: 44px;" type="submit" name="command" value="Move Down">↓
             </button>
         </form>
-        <br>
-        <form action="/interact" method="POST">
-            <button class="button_purple" type="submit" name="interact" value="Interact Get Region">Interact</button>
-        </form>
-        <button class="button_purple" onclick="location.href='/inventory'">Inventory</button>
+        <h2>Commands</h2>
+        <div class="commands-container">
+            <form action="/interact" method="POST">
+                <button class="button_purple" type="submit" name="interact" value="Interact Get Region">Interact
+                </button>
+            </form>
+            <button class="button_purple" onclick="location.href='/inventory'">Inventory</button>
+            <button class="button_purple" id="helpBtn">Help</button>
+        </div>
+        <div id="myModalHelp" class="modal">
+            <div class="modal-content">
+                <h2>Commands:</h2>
+                <ol>
+                    <li>
+                        <h3>Move player:</h3>
+                        <ul>
+                            <li>move up</li>
+                            <li>move down</li>
+                            <li>move left</li>
+                            <li>move right</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h3>Save, load game:</h3>
+                        <ul>
+                            <li>save (your save name)</li>
+                            <li>load (your save name)</li>
+                        </ul>
+                    </li>
+                </ol>
+                <span class="close button_gray">Back</span>
+            </div>
+        </div>
+
     </div>
 </div>
 </body>
@@ -300,6 +337,25 @@
     // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
         modal.style.display = "none";
+    }
+
+    // Get the modal
+    const modalHelp = document.getElementById("myModalHelp");
+
+    // Get the button that opens the modal
+    const btnHelp = document.getElementById("helpBtn");
+
+    // Get the <span> element that closes the modal
+    const spanHelp = document.getElementsByClassName("close")[1];
+
+    // When the user clicks on the button, open the modal
+    btnHelp.onclick = function () {
+        modalHelp.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    spanHelp.onclick = function () {
+        modalHelp.style.display = "none";
     }
 </script>
 </html>
