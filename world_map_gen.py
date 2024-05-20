@@ -1,26 +1,10 @@
 import random
-from colorama import Fore, Style, init
 
-init()
 volcano_amount = 3
 
 biomes = ["Grassland", "Forest", "Mountain", "Ocean", "Desert", "Rainforest", "Temperate Forest", "Tundra", "Taiga",
           "Taiga Forest", "Savanna", "Volcano"]
-# Biome characters dictionary with corresponding colors
-biome_colors = {
-    "Grassland": Fore.LIGHTGREEN_EX,
-    "Forest": Fore.GREEN,
-    "Mountain": Fore.LIGHTBLACK_EX,
-    "Ocean": Fore.CYAN,
-    "Desert": Fore.LIGHTYELLOW_EX,
-    "Rainforest": Fore.GREEN,
-    "Temperate Forest": Fore.GREEN,
-    "Tundra": Fore.WHITE,
-    "Taiga": Fore.WHITE,
-    "Taiga Forest": Fore.WHITE,
-    "Savanna": Fore.YELLOW,
-    "Volcano": Fore.RED
-}
+
 
 # Biome characters dictionary
 biome_characters = {
@@ -103,13 +87,6 @@ def generate_terrain(height, width):
     # print(weighted_terrain)
     return weighted_terrain
 
-
-# Function to display the terrain grid
-def display_terrain(terrain_grid, height, width):
-    for y in range(height):
-        for x in range(width):
-            print(biome_colors[terrain_grid[x][y]] + biome_characters[terrain_grid[x][y]], end=" ")
-        print(Style.RESET_ALL)
 
 
 def count(neighbors, what_biome):

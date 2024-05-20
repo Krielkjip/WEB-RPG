@@ -1,10 +1,6 @@
 import random
 import json
 from pathlib import Path
-from colorama import Fore, Style, init
-
-init()
-
 
 def generate_terrain(height, width, biome):
     file_path = Path(__file__).absolute().parent
@@ -22,34 +18,7 @@ def generate_terrain(height, width, biome):
     return weighted_terrain
 
 
-region_colors = {
-    "Tree": Fore.GREEN,
-    "Grass": Fore.LIGHTGREEN_EX,
-    "Pebble": Fore.LIGHTBLACK_EX,
-    "Flower": Fore.LIGHTMAGENTA_EX,
-    "Bush": Fore.GREEN,
-    "Water": Fore.CYAN,
-    "Rock": Fore.LIGHTBLACK_EX,
-    "Moss": Fore.GREEN,
-    "Dead Tree": Fore.YELLOW,
-    "Fungi Tree": Fore.MAGENTA,
-    "Fungi": Fore.LIGHTMAGENTA_EX,
-    "Iron Ore": Fore.LIGHTRED_EX,
-    "Snow": Fore.WHITE,
-    "Deep Snow": Fore.WHITE,
-    "Ice": Fore.LIGHTBLUE_EX,
-    "Sandstone": Fore.LIGHTYELLOW_EX,
-    "Sand": Fore.LIGHTYELLOW_EX,
-    "Cactus": Fore.LIGHTGREEN_EX,
-    "Empty": Fore.LIGHTBLACK_EX,
-    'Coal Ore': Fore.LIGHTBLACK_EX,
-    "Mud": Fore.YELLOW,
-    "Dead Bush": Fore.YELLOW,
-    "Magma": Fore.LIGHTRED_EX,
-    "Ash": Fore.LIGHTBLACK_EX,
-    "Ash Rock": Fore.LIGHTBLACK_EX,
-    "Sulfur": Fore.YELLOW
-}
+
 
 region_characters = {
     "Tree": "T",
@@ -79,15 +48,6 @@ region_characters = {
     "Ash Rock": "A",
     "Sulfur": "S"
 }
-
-
-# Function to display the terrain grid
-def display_terrain(terrain_grid, height, width):
-    for y in range(height):
-        for x in range(width):
-            print(region_colors[terrain_grid[x][y]] + region_characters[terrain_grid[x][y]], end=" ")
-        print(Style.RESET_ALL)
-
 
 def count(neighbors, what_region):
     return sum(1 for neighbor in neighbors if neighbor == what_region)
