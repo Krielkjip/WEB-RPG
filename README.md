@@ -1,10 +1,10 @@
 # WEB-RPG
 
 ## Requirements
-- Python 3.12 installed on your system
+- Python 3.11 Or higher (tested on python 3.11)
 - Any Browser
 
-## Create a Virtual Environment (python 3.12)
+## Create a Virtual Environment
 
 To create a virtual environment, you can use the following commands. Ensure you select the created virtual environment
 in your IDE if you're using one.
@@ -15,18 +15,20 @@ in your IDE if you're using one.
 python -m venv venv
 ```
 
-### Windows-Specific Command
-
-```bash
-python3.12.exe -m venv venv
-```
-
 ## Activate Virtual Environment
 
 Activate the virtual environment to ensure all dependencies are installed within this isolated environment.
 
+### Windows
+
 ```bash
 .\venv\Scripts\activate
+```
+
+### Mac/Linux
+
+```bash
+source venv/bin/activate
 ```
 
 ## Install Dependencies
