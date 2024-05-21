@@ -221,6 +221,7 @@
                 }
             </style>
             {% set map_size = map|length %}
+            <span id="hover-text"></span>
             <table>
                 {% for y in range(map_size) %}
                     <tr>
@@ -229,11 +230,13 @@
                             {% set type_info = type_map[item] %}
                             {% if player_state["location"][0] == x and player_state["location"][1] == y %}
                                 <td class="player tile"
-                                    style="color:{{ type_info['color'] }}" data-text="{{ item }}">{{ type_info['char'] }}
+                                    style="color:{{ type_info['color'] }}"
+                                    data-text="{{ item }}">{{ type_info['char'] }}
                                 </td>
                             {% else %}
                                 <td class="grid-item tile"
-                                    style="color:{{ type_info['color'] }}" data-text="{{ item }}">{{ type_info['char'] }}
+                                    style="color:{{ type_info['color'] }}"
+                                    data-text="{{ item }}">{{ type_info['char'] }}
                                 </td>
                             {% endif %}
                         {% endfor %}

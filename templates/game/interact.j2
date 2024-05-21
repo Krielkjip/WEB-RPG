@@ -86,6 +86,19 @@
             margin-bottom: 4px;
             border-radius: 5px;
         }
+
+        #hover-text {
+            display: none;
+            position: absolute;
+            background-color: #3c1178;
+            border: 1px solid white;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: white;
+            pointer-events: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -162,23 +175,8 @@
                     display: none;
                 }
             </style>
-            <script>
-                setInterval(function () {
-                    var blinkingTexts = document.querySelectorAll(".blinkingText");
-                    var hiddenTexts = document.querySelectorAll(".hiddenText");
-
-                    blinkingTexts.forEach(function (blinkingText, index) {
-                        if (blinkingText.style.display === "none") {
-                            blinkingText.style.display = "inline";
-                            hiddenTexts[index].style.display = "none";
-                        } else {
-                            blinkingText.style.display = "none";
-                            hiddenTexts[index].style.display = "inline";
-                        }
-                    });
-                }, 500);
-            </script>
             {% set region_map_size = writable_map|length %}
+            <span id="hover-text"></span>
             <table>
                 {% for y in range(region_map_size) %}
                     <tr>
@@ -189,30 +187,36 @@
                             {% set type_info_map = type_region_map[tile] %}
                             {% set type_info_mob = type_mobs[mob] %}
                             {% if found_mob %}
-
+{#                                TODO: fix blinking tile data-text#}
                                 {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
                                     <td class="player">
-                                <span class="blinkingText"
-                                      style="color:{{ type_info_mob['color'] }}">{{ type_info_mob['char'] }}</span>
-                                        <span class="hiddenText hidden-letter"
-                                              style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</span>
+                                <span class="blinkingText tile"
+                                      style="color:{{ type_info_mob['color'] }}"
+                                      data-text="{{ mob }}">{{ type_info_mob['char'] }}</span>
+                                        <span class="hiddenText hidden-letter tile"
+                                              style="color:{{ type_info_map['color'] }}"
+                                              data-text="{{ tile }}">{{ type_info_map['char'] }}</span>
                                     </td>
                                 {% else %}
                                     <td class="grid-item">
-                                <span class="blinkingText"
-                                      style="color:{{ type_info_mob['color'] }}">{{ type_info_mob['char'] }}</span>
-                                        <span class="hiddenText hidden-letter"
-                                              style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</span>
+                                <span class="blinkingText tile"
+                                      style="color:{{ type_info_mob['color'] }}"
+                                      data-text="{{ mob }}">{{ type_info_mob['char'] }}</span>
+                                        <span class="hiddenText hidden-letter tile"
+                                              style="color:{{ type_info_map['color'] }}"
+                                              data-text="{{ tile }}">{{ type_info_map['char'] }}</span>
                                     </td>
 
                                 {% endif %}
                             {% else %}
                                 {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
-                                    <td class="player"
-                                        style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</td>
+                                    <td class="player tile"
+                                        style="color:{{ type_info_map['color'] }}"
+                                        data-text="{{ tile }}">{{ type_info_map['char'] }}</td>
                                 {% else %}
-                                    <td class="grid-item"
-                                        style="color:{{ type_info_map['color'] }}">{{ type_info_map['char'] }}</td>
+                                    <td class="grid-item tile"
+                                        style="color:{{ type_info_map['color'] }}"
+                                        data-text="{{ tile }}">{{ type_info_map['char'] }}</td>
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
@@ -230,7 +234,8 @@
             </button>
             <br>
             <button class="button_move" type="submit" name="interact" value="Move Left">←</button>
-            <button class="button_move" style="margin-left: 44px;" type="submit" name="interact" value="Move Right">→</button>
+            <button class="button_move" style="margin-left: 44px;" type="submit" name="interact" value="Move Right">→
+            </button>
             <br>
             <button class="button_move" style="margin-left: 44px;" type="submit" name="interact" value="Move Down">
                 ↓
@@ -248,4 +253,35 @@
     </div>
 </div>
 </body>
+
+<script>
+    const tiles = document.querySelectorAll('.tile');
+    const hoverText = document.getElementById('hover-text');
+
+    tiles.forEach(tile => {
+        tile.addEventListener('mousemove', (e) => {
+            hoverText.textContent = tile.getAttribute('data-text');
+            hoverText.style.display = 'block';
+            hoverText.style.left = `${e.pageX + 10}px`;
+            hoverText.style.top = `${e.pageY + 10}px`;
+        });
+        tile.addEventListener('mouseout', () => {
+            hoverText.style.display = 'none';
+        });
+    });
+    setInterval(function () {
+        var blinkingTexts = document.querySelectorAll(".blinkingText");
+        var hiddenTexts = document.querySelectorAll(".hiddenText");
+
+        blinkingTexts.forEach(function (blinkingText, index) {
+            if (blinkingText.style.display === "none") {
+                blinkingText.style.display = "inline";
+                hiddenTexts[index].style.display = "none";
+            } else {
+                blinkingText.style.display = "none";
+                hiddenTexts[index].style.display = "inline";
+            }
+        });
+    }, 500);
+</script>
 </html>
