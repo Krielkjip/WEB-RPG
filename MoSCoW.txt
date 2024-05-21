@@ -1,19 +1,17 @@
 Must Have
 - world map rendering
 - player movement
-- crafting
-- death logic
-- building
-- mining
+- saving and loading
+- collecting resources
 
 Should Have
-- random world gen
 - boss
 - explanation screen
 - fishing
 - trading
-
-- data storing (SqL)
+- crafting
+- death logic
+- building
 - player login/account
 
 Could Have
