@@ -51,7 +51,7 @@ async def command(request: Request, command: str):
     print(player_state)
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map,
-                                       "state": state, "save_location": save_location})
+                                       "state": state, "save_location": save_location, "command": command.lower()})
 
 
 @app.post("/index")
@@ -67,7 +67,7 @@ async def command(request: Request, command: str = Form(default="")):
     print(player_state)
     return templates.TemplateResponse('game/game.j2',
                                       {"request": request, "player_state": player_state, "map": world_map,
-                                       "state": state, "save_location": save_location})
+                                       "state": state, "save_location": save_location, "command": command.lower()})
 
 
 @app.post("/interact")
