@@ -90,6 +90,17 @@
             border-radius: 5px;
         }
 
+        .modal-content-info {
+            background-color: #3c1178;
+            margin: 10% auto;
+            padding: 20px;
+            border: 2px solid white;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
         .button_purple {
             padding: 10px;
             cursor: pointer;
@@ -140,6 +151,31 @@
             pointer-events: none;
             border-radius: 5px;
         }
+
+        .card {
+            background-color: #18191a;
+            border: 2px solid white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            width: 300px;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: auto;
+        }
+
+        .name {
+            margin-bottom: 0;
+        }
+
+        .name-description {
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
@@ -156,7 +192,7 @@
 
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <p>You are about to quit the game do you wish to save before quiting?</p>
+                <p>You are about to quit the game do you wish to save before quitting?</p>
                 {% if save_location != "" %}
                     <form id="saveForm" action="/index" method="POST">
                         <input type="hidden" name="command" value="save {{ save_location }}">
@@ -315,7 +351,31 @@
                     </li>
                 </ol>
                 <br/>
-                <span class="close button_gray">Back</span>
+                <span class="close button_gray">Go Back</span>
+            </div>
+        </div>
+        <!-- Add a new button to open the info modal -->
+        <button id="infoBtn" class="button_purple" type="button">Info</button>
+
+        <!-- Add the info modal content -->
+        <div id="myModalInfo" class="modal">
+            <div class="modal-content-info">
+                <h2>Game Information</h2>
+                <p>RuneQuest is a text based game rpg game.</p>
+                <h3>Developers:</h3>
+                <div class="card">
+                    <img src="/statics/OnnoteVoortwis.png" alt="Profile Picture" class="profile-pic">
+                    <h3 class="name">Onno te Voortwis</h3>
+                    <p class="name-description">Programmer</p>
+                </div>
+                <div class="card">
+                    <img src="/statics/MiniDonzie.png" alt="Profile Picture" class="profile-pic">
+                    <h3 class="name">Mini Donzie</h3>
+                    <p class="name-description">Founder, just kidding</p>
+                </div>
+                <br/>
+                <br/>
+                <span class="close button_gray" id="closeInfoBtn">Go Back</span>
             </div>
         </div>
 
@@ -389,8 +449,32 @@
 
     function blur() {
         document.getElementById("command").blur();
-
     }
+
+    // Get the modal
+    const modalInfo = document.getElementById("myModalInfo");
+
+    // Get the button that opens the modal
+    const infoBtn = document.getElementById("infoBtn");
+
+    // Get the span element that closes the modal
+    const closeInfoBtn = document.getElementById("closeInfoBtn");
+
+    // Add event listeners
+    infoBtn.addEventListener("click", () => {
+        modalInfo.style.display = "block";
+    });
+
+    closeInfoBtn.onclick = function () {
+        modalInfo.style.display = "none";
+        document.getElementById("command").focus();
+    }
+
+    // Check condition and open modal if true
+    {% if command == "info" %}
+        modalInfo.style.display = "block";
+        setTimeout(blur, 50);
+    {% endif %}
 
     const tiles = document.querySelectorAll('.tile');
     const hoverText = document.getElementById('hover-text');
