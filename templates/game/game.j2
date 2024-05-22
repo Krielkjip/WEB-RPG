@@ -378,12 +378,19 @@
     // When the user clicks on <span> (x), close the modal
     spanHelp.onclick = function () {
         modalHelp.style.display = "none";
+        document.getElementById("command").focus();
     }
 
     // Check condition and open modal if true
     {% if command == "help" %}
         modalHelp.style.display = "block";
+        setTimeout(blur, 50);
     {% endif %}
+
+    function blur() {
+        document.getElementById("command").blur();
+
+    }
 
     const tiles = document.querySelectorAll('.tile');
     const hoverText = document.getElementById('hover-text');
