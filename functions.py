@@ -1,8 +1,23 @@
 import json
 import random
+import re
 
 from world_map_gen import run_world_gen
 from region_map_gen import run_region_gen
+
+
+def sanitize_filename(filename: str, replacement: str = '_') -> str:
+    # Define a regular expression pattern for invalid filename characters
+    invalid_chars = r'[<>:"/\\|?*\x00-\x1F]'
+
+    # Remove invalid characters using the regular expression
+    sanitized = re.sub(invalid_chars, '', filename)
+
+    # Replace spaces with the specified replacement character
+    sanitized = re.sub(r'\s+', replacement, sanitized)
+
+    # Return the sanitized filename
+    return sanitized
 
 
 def create_player_state():
@@ -13,17 +28,17 @@ def create_map():
     return {"world_map": [], "region_map": {}}
 
 
-def save_game(command, map, player_state, mobs_data):
-    if command[-5:] == ".json":
-        file_location = "save_data/" + command[5:]
+def save_game(save_location, map, player_state, mobs_data):
+    if save_location[-5:] == ".json":
+        file_location = "save_data/" + save_location
     else:
-        file_location = "save_data/" + command[5:] + ".json"
+        file_location = "save_data/" + save_location + ".json"
     with open(file_location, 'w') as json_file:
         json.dump([map, mobs_data, player_state], json_file)
         print("SAVED DATA")
 
 
-def load_game(command, map_size, region_map_size, map, player_state, mobs_data):
+def load_game(command, save_location, map_size, region_map_size, map, player_state, mobs_data):
     if command == "load current":
         return map, player_state, mobs_data, False
     elif command == "load fresh":
@@ -47,10 +62,10 @@ def load_game(command, map_size, region_map_size, map, player_state, mobs_data):
         return map, player_state, mobs_data, False
     else:
         try:
-            if command[-5:] == ".json":
-                file_location = "save_data/" + command[5:]
+            if save_location[-5:] == ".json":
+                file_location = "save_data/" + save_location
             else:
-                file_location = "save_data/" + command[5:] + ".json"
+                file_location = "save_data/" + save_location + ".json"
             print(file_location)
             with open(file_location, 'r') as json_file:
                 data = json.load(json_file)
@@ -72,7 +87,8 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
             state["error_msg"] = "Please enter save name"
         else:
             save_location = command[5:]
-            save_game(command, map, player_state, mobs_data)
+            save_location = sanitize_filename(save_location)
+            save_game(save_location, map, player_state, mobs_data)
             print("Saving")
     elif command[:4].lower() == "load":
         if command == "load current":
@@ -81,7 +97,9 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
             save_location = ""
         else:
             save_location = command[5:]
-        map, player_state, mobs_data, file_not_found = load_game(command, map_size, region_map_size, map, player_state, mobs_data)
+            save_location = sanitize_filename(save_location)
+        map, player_state, mobs_data, file_not_found = load_game(command, save_location, map_size, region_map_size, map, player_state,
+                                                                 mobs_data)
         if file_not_found:
             state["file_not_found"] = True
         print("Loading")
