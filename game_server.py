@@ -81,7 +81,7 @@ async def interact(request: Request, interact: str = Form(default="")):
     print(player_state)
     return templates.TemplateResponse('game/interact.j2',
                                       {"request": request, "biome_data": biome_data, "writable_map": writable_map,
-                                       "player_state": player_state})
+                                       "player_state": player_state, "interact": interact.lower()})
 
 
 @app.post("/inventory")

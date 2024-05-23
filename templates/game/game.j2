@@ -326,6 +326,8 @@
             </form>
             <button class="button_purple" onclick="location.href='/inventory'">Inventory</button>
             <button class="button_purple" id="helpBtn">Help</button>
+            <!-- Add a new button to open the info modal -->
+            <button id="infoBtn" class="button_purple" type="button">Info</button>
         </div>
         {% if command == "help" %}
         {% endif %}
@@ -354,8 +356,6 @@
                 <span class="close button_gray">Go Back</span>
             </div>
         </div>
-        <!-- Add a new button to open the info modal -->
-        <button id="infoBtn" class="button_purple" type="button">Info</button>
 
         <!-- Add the info modal content -->
         <div id="myModalInfo" class="modal">
@@ -366,12 +366,12 @@
                 <div class="card">
                     <img src="/statics/OnnoteVoortwis.png" alt="Profile Picture" class="profile-pic">
                     <h3 class="name">Onno te Voortwis</h3>
-                    <p class="name-description">Programmer</p>
+                    <p class="name-description">Programmer and Founder</p>
                 </div>
                 <div class="card">
                     <img src="/statics/MiniDonzie.png" alt="Profile Picture" class="profile-pic">
                     <h3 class="name">Mini Donzie</h3>
-                    <p class="name-description">Founder, just kidding</p>
+                    <p class="name-description">Art Director</p>
                 </div>
                 <br/>
                 <br/>
@@ -442,7 +442,7 @@
     }
 
     // Check condition and open modal if true
-    {% if command == "help" %}
+    {% if command == "help" or command == "h" %}
         modalHelp.style.display = "block";
         setTimeout(blur, 50);
     {% endif %}

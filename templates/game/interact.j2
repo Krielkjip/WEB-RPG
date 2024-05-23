@@ -99,9 +99,74 @@
             pointer-events: none;
             border-radius: 5px;
         }
+
+        .commands-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #3c1178;
+            margin: 15% auto;
+            padding: 20px;
+            border: 2px solid white;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .modal-content-info {
+            background-color: #3c1178;
+            margin: 10% auto;
+            padding: 20px;
+            border: 2px solid white;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .card {
+            background-color: #18191a;
+            border: 2px solid white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            width: 300px;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: auto;
+        }
+
+        .name {
+            margin-bottom: 0;
+        }
+
+        .name-description {
+            margin-top: 0;
+        }
     </style>
 </head>
-<body>
+    <body>
 <div class="top-bar">
     <h1>Interact</h1>
     <button class="button_gray" onclick="location.href='/index?command=load current'">Back to map</button>
@@ -187,7 +252,6 @@
                             {% set type_info_map = type_region_map[tile] %}
                             {% set type_info_mob = type_mobs[mob] %}
                             {% if found_mob %}
-{#                                TODO: fix blinking tile data-text#}
                                 {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
                                     <td class="player">
                                 <span class="blinkingText tile"
@@ -227,7 +291,14 @@
     </div>
 
     <div class="box-2">
-        <H2>Controls</H2>
+        <h2>Send Text Command</h2>
+        <form action="/interact" method="POST">
+            <label for="interact">Enter command:</label><br>
+            <input class="button_purple" type="text" id="interact" name="interact" autofocus><br><br>
+            <input class="button_purple" type="submit" value="Submit">
+        </form>
+
+        <H2>Move</H2>
         <form action="/interact" method="POST">
             <button class="button_move" style="margin-left: 44px;" type="submit" name="interact" value="Move Up">
                 ↑
@@ -241,7 +312,7 @@
                 ↓
             </button>
         </form>
-        <br>
+        <h2>Commands</h2>
         {% set current_tile = writable_map[player_state["region_location"][1]][player_state["region_location"][0]][0] %}
         <form action="/interact" method="POST">
             {% if current_tile == "Tree" %}
@@ -250,16 +321,115 @@
                 <button class="button_purple" type="submit" name="interact" value="Mine Rock">Mine Rock</button>
             {% endif %}
         </form>
+
+        <div class="commands-container">
+            <button class="button_purple" id="helpBtn">Help</button>
+            <button id="infoBtn" class="button_purple" type="button">Info</button>
+        </div>
+        <div id="myModalHelp" class="modal">
+            <div class="modal-content">
+                <h2>Commands:</h2>
+                <ol style="text-align: start">
+                    <li>
+                        <h3>Move player:</h3>
+                        <ul>
+                            <li>move up</li>
+                            <li>move down</li>
+                            <li>move left</li>
+                            <li>move right</li>
+                        </ul>
+                    </li>
+                </ol>
+                <br/>
+                <span class="close button_gray" id="closeHelpBtn">Go Back</span>
+            </div>
+        </div>
+
+        <div id="myModalInfo" class="modal">
+            <div class="modal-content-info">
+                <h2>Game Information</h2>
+                <p>RuneQuest is a text based game rpg game.</p>
+                <h3>Developers:</h3>
+                <div class="card">
+                    <img src="/statics/OnnoteVoortwis.png" alt="Profile Picture" class="profile-pic">
+                    <h3 class="name">Onno te Voortwis</h3>
+                    <p class="name-description">Programmer and Founder</p>
+                </div>
+                <div class="card">
+                    <img src="/statics/MiniDonzie.png" alt="Profile Picture" class="profile-pic">
+                    <h3 class="name">Mini Donzie</h3>
+                    <p class="name-description">Art Director</p>
+                </div>
+                <br/>
+                <br/>
+                <span class="close button_gray" id="closeInfoBtn">Go Back</span>
+            </div>
+        </div>
     </div>
 </div>
 </body>
 
 <script>
+        // Get the modal
+    const modalHelp = document.getElementById("myModalHelp");
+
+    // Get the button that opens the modal
+    const btnHelp = document.getElementById("helpBtn");
+
+    // Get the <span> element that closes the modal
+    const closeHelpBtn = document.getElementById("closeHelpBtn");
+
+    // When the user clicks on the button, open the modal
+    btnHelp.onclick = function () {
+        modalHelp.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    closeHelpBtn.onclick = function () {
+        modalHelp.style.display = "none";
+        document.getElementById("command").focus();
+    }
+
+    // Check condition and open modal if true
+    {% if interact == "help" or interact == "h" %}
+        modalHelp.style.display = "block";
+        setTimeout(blur, 50);
+    {% endif %}
+
+    function blur() {
+        document.getElementById("command").blur();
+    }
+
+    // Get the modal
+    const modalInfo = document.getElementById("myModalInfo");
+
+    // Get the button that opens the modal
+    const infoBtn = document.getElementById("infoBtn");
+
+    // Get the span element that closes the modal
+    const closeInfoBtn = document.getElementById("closeInfoBtn");
+
+    // Add event listeners
+    infoBtn.addEventListener("click", () => {
+        modalInfo.style.display = "block";
+    });
+
+    closeInfoBtn.onclick = function () {
+        modalInfo.style.display = "none";
+        document.getElementById("command").focus();
+    }
+
+    // Check condition and open modal if true
+    {% if interact == "info" %}
+        modalInfo.style.display = "block";
+        setTimeout(blur, 50);
+    {% endif %}
+
     const tiles = document.querySelectorAll('.tile');
     const hoverText = document.getElementById('hover-text');
 
     tiles.forEach(tile => {
-        tile.addEventListener('mousemove', (e) => {
+        tile.addEventListener('mouseover', (e) => {
             hoverText.textContent = tile.getAttribute('data-text');
             hoverText.style.display = 'block';
             hoverText.style.left = `${e.pageX + 10}px`;
