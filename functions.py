@@ -42,7 +42,12 @@ def process_craft(craft, player_state):
         else:
             fail_message = "You didn't had a log to craft planks"
     elif craft == "sticks":
-        pass
+        if player_state["inventory"]["planks_amount"] > 1:
+            player_state["inventory"]["planks_amount"] -= 2
+            player_state["inventory"]["sticks_amount"] += 4
+            message = "You crafted 4 sticks"
+        else:
+            fail_message = "You didn't had planks to craft sticks"
 
     return player_state, message, fail_message
 
