@@ -99,78 +99,92 @@
 
 <div class="container">
     <div class="box-1">
+        <form action="/inventory" method="POST">
 
-        <h2>Craft</h2>
+            <h2>Craft</h2>
 
-        <h3>Resources and Materials</h3>
-        <div class="button-container">
-            <button class="button_purple">4x Planks</button>
-            <div class="description">
-                <p>1x Logs</p>
+            <h3>Resources and Materials</h3>
+            <div class="button-container">
+                <button class="button_purple" type="submit" name="craft" value="Craft Planks">4x Planks</button>
+                <div class="description">
+                    <p>1x Logs</p>
+                </div>
             </div>
-        </div>
-        <div class="button-container">
-            <button class="button_purple">4x Sticks</button>
-            <div class="description">
-                <p>2x Planks</p>
+            <div class="button-container">
+                <button class="button_purple" type="submit" name="craft" value="Craft Sticks">4x Sticks</button>
+                <div class="description">
+                    <p>2x Planks</p>
+                </div>
             </div>
-        </div>
 
-        <h3>Tools and Equipment</h3>
-        <div class="button-container">
-            <button class="button_purple">10x Wooden Pickaxe Uses</button>
-            <div class="description">
-                <p>3x Planks</p>
-                <p>2x Sticks</p>
+            <h3>Tools and Equipment</h3>
+            <div class="button-container">
+                <button class="button_purple" type="submit" name="craft" value="Craft Wooden Pickaxe Uses">10x Wooden
+                    Pickaxe Uses
+                </button>
+                <div class="description">
+                    <p>3x Planks</p>
+                    <p>2x Sticks</p>
+                </div>
             </div>
-        </div>
-        <div class="button-container">
-            <button class="button_purple">10x Wooden Axe Uses</button>
-            <div class="description">
-                <p>3x Planks</p>
-                <p>2x Sticks</p>
+            <div class="button-container">
+                <button class="button_purple" type="submit" name="craft" value="Craft Wooden Axe Uses">10x Wooden Axe
+                    Uses
+                </button>
+                <div class="description">
+                    <p>3x Planks</p>
+                    <p>2x Sticks</p>
+                </div>
             </div>
-        </div>
-        <br/>
-        <div class="button-container">
-            <button class="button_purple">10x Stone Pickaxe Uses</button>
-            <div class="description">
-                <p>3x Rocks</p>
-                <p>2x Sticks</p>
+            <br/>
+            <div class="button-container">
+                <button class="button_purple" type="submit" name="craft" value="Craft Stone Pickaxe Uses">10x Stone
+                    Pickaxe Uses
+                </button>
+                <div class="description">
+                    <p>3x Rocks</p>
+                    <p>2x Sticks</p>
+                </div>
             </div>
-        </div>
-        <div class="button-container">
-            <button class="button_purple">10x Stone Axe Uses</button>
-            <div class="description">
-                <p>3x Rocks</p>
-                <p>2x Sticks</p>
+            <div class="button-container">
+                <button class="button_purple" type="submit" name="craft" value="Craft Stone Axe Uses">10x Stone Axe
+                    Uses
+                </button>
+                <div class="description">
+                    <p>3x Rocks</p>
+                    <p>2x Sticks</p>
+                </div>
             </div>
-        </div>
 
-        <h3>Weapons and Armor</h3>
-        <div class="button-container">
-            <button class="button_purple">NONE</button>
-            <div class="description">
-                <p>NONE</p>
+            <h3>Weapons and Armor</h3>
+            <div class="button-container">
+                <button class="button_purple">NONE</button>
+                <div class="description">
+                    <p>NONE</p>
+                </div>
             </div>
-        </div>
 
-        <h3>Foods and Drinks</h3>
-        <div class="button-container">
-            <button class="button_purple">NONE</button>
-            <div class="description">
-                <p>NONE</p>
+            <h3>Foods and Drinks</h3>
+            <div class="button-container">
+                <button class="button_purple">NONE</button>
+                <div class="description">
+                    <p>NONE</p>
+                </div>
             </div>
-        </div>
 
-        <h3>Medical Supplies</h3>
-        <div class="button-container">
-            <button class="button_purple">NONE</button>
-            <div class="description">
-                <p>NONE</p>
+            <h3>Medical Supplies</h3>
+            <div class="button-container">
+                <button class="button_purple">NONE</button>
+                <div class="description">
+                    <p>NONE</p>
+                </div>
             </div>
-        </div>
-
+        </form>
+        {% if message == "" %}
+            {{ fail_message }}
+        {% else %}
+            {{ message }}
+        {% endif %}
 
     </div>
     <div class="box-2">

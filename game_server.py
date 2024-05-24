@@ -85,9 +85,11 @@ async def interact(request: Request, interact: str = Form(default="")):
 
 
 @app.post("/inventory")
-async def inventory(request: Request):
+async def inventory(request: Request, craft: str = Form(default="")):
     global player_state
-    return templates.TemplateResponse('game/inventory.j2', {'request': request, "player_state": player_state})
+    print(craft)
+    player_state, message, fail_message = process_craft(craft, player_state)
+    return templates.TemplateResponse('game/inventory.j2', {'request': request, "player_state": player_state, "message": message, "fail_message": fail_message})
 
 
 @app.get("/inventory")

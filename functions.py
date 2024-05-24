@@ -22,8 +22,29 @@ def sanitize_filename(filename: str, replacement: str = '_') -> str:
 
 def create_player_state():
     return {"location": [0, 0], "region_location": [0, 0],
-            "inventory": {"logs_amount": 0, "rocks_amount": 0, "planks_amount": 0, "sticks_amount": 0,
-                          "wooden_pickaxe_uses": 10, "wooden_axe_uses": 10, "stone_pickaxe_uses": 0, "stone_axe_uses": 0}}
+            "inventory": {"logs_amount": 100, "rocks_amount": 100, "planks_amount": 0, "sticks_amount": 0,
+                          "wooden_pickaxe_uses": 10, "wooden_axe_uses": 10, "stone_pickaxe_uses": 0,
+                          "stone_axe_uses": 0}}
+
+
+def process_craft(craft, player_state):
+    print(craft)
+    craft = craft.lower()
+    craft = craft[6:]
+    message = ""
+    fail_message = ""
+    print(craft)
+    if craft == "planks":
+        if player_state["inventory"]["logs_amount"] > 0:
+            player_state["inventory"]["logs_amount"] -= 1
+            player_state["inventory"]["planks_amount"] += 4
+            message = "You crafted 4 planks"
+        else:
+            fail_message = "You didn't had a log to craft planks"
+    elif craft == "sticks":
+        pass
+
+    return player_state, message, fail_message
 
 
 def create_map():
