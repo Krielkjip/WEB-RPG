@@ -176,14 +176,19 @@
     <div class="box-2">
         <h2>Items</h2>
         <ul>
-            {% for item in player_state["inventory"] %}
+            {% for item, amount in player_state["inventory"].items() %}
                 <li>
-                    {{ player_state["inventory"][item] }}x
-                    {{ item[:-7] }}
+                    {{ amount }}x
+                    {% if item.endswith("_amount") %}
+                        {{ item[:-7].replace('_', ' ') }}
+                    {% else %}
+                        {{ item.replace('_', ' ') }}
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
     </div>
+
 </div>
 </body>
 </html>

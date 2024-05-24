@@ -21,7 +21,9 @@ def sanitize_filename(filename: str, replacement: str = '_') -> str:
 
 
 def create_player_state():
-    return {"location": [0, 0], "region_location": [0, 0], "inventory": {"logs_amount": 0, "rocks_amount": 0}}
+    return {"location": [0, 0], "region_location": [0, 0],
+            "inventory": {"logs_amount": 0, "rocks_amount": 0, "planks_amount": 0, "sticks_amount": 0,
+                          "wooden_pickaxe_uses": 10, "wooden_axe_uses": 10, "stone_pickaxe_uses": 0, "stone_axe_uses": 0}}
 
 
 def create_map():
@@ -98,7 +100,8 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
         else:
             save_location = command[5:]
             save_location = sanitize_filename(save_location)
-        map, player_state, mobs_data, file_not_found = load_game(command, save_location, map_size, region_map_size, map, player_state,
+        map, player_state, mobs_data, file_not_found = load_game(command, save_location, map_size, region_map_size, map,
+                                                                 player_state,
                                                                  mobs_data)
         if file_not_found:
             state["file_not_found"] = True
