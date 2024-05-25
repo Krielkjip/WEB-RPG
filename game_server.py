@@ -14,6 +14,7 @@ map_size = 16
 region_map_size = 8
 mobs_data = []
 region_map = []
+writable_map = []
 last_interaction = 0
 map = create_map()
 player_state = create_player_state()
