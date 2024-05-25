@@ -73,18 +73,17 @@ def generate_terrain(height, width):
         row = []
         for y in range(height):
             if y <= height / 4 - 1:
-                row.append(random.choices(terrain_types, weights=terrain_weights_cold.values())[0])
+                row.append(random.choices(terrain_types, weights=list(terrain_weights_cold.values()))[0])
             elif y >= height / 4 * 3:
-                row.append(random.choices(terrain_types, weights=terrain_weights_hot.values())[0])
+                row.append(random.choices(terrain_types, weights=list(terrain_weights_hot.values()))[0])
             else:
-                row.append(random.choices(terrain_types, weights=terrain_weights.values())[0])
+                row.append(random.choices(terrain_types, weights=list(terrain_weights.values()))[0])
         weighted_terrain.append(row)
 
     for i in range(volcano_amount):
         x = random.randint(0, width - 1)
         y = random.randint(0, height - 1)
         weighted_terrain[x][y] = "Volcano"
-    # print(weighted_terrain)
     return weighted_terrain
 
 

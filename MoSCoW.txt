@@ -3,13 +3,13 @@ Must Have
 - player movement
 - saving and loading
 - collecting resources
+- crafting
 
 Should Have
 - boss
 - explanation screen
 - fishing
 - trading
-- crafting
 - death logic
 - building
 - player login/account
