@@ -164,9 +164,29 @@
         .name-description {
             margin-top: 0;
         }
+
+        /* Popup container */
+        .popup {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid white;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            z-index: 9999;
+        }
+
+        /* Text on top of the popup */
+        .popup-text {
+            font-size: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
-    <body>
+<body>
 <div class="top-bar">
     <h1>Interact</h1>
     <button class="button_gray" onclick="location.href='/index?command=load current'">Back to map</button>
@@ -367,10 +387,35 @@
         </div>
     </div>
 </div>
+{% if message == "" and fail_message == "" %}
+{% elif message == "" %}
+    <div id="popup" class="popup" style="background-color: #ed4337">
+        <div class="popup-text">{{ fail_message }}</div>
+    </div>
+
+{% elif fail_message == "" %}
+    <div id="popup" class="popup" style="background-color: #02b875">
+        <div class="popup-text">{{ message }}</div>
+    </div>
+{% endif %}
+
+<script>
+    // Function to show the popup for 3 seconds
+    function showPopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "block";
+        setTimeout(function () {
+            popup.style.display = "none";
+        }, 3000); // 3 seconds
+    }
+
+    // Call the function to show the popup
+    showPopup();
+</script>
 </body>
 
 <script>
-        // Get the modal
+    // Get the modal
     const modalHelp = document.getElementById("myModalHelp");
 
     // Get the button that opens the modal

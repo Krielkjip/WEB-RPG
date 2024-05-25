@@ -200,32 +200,6 @@
                 </div>
             </div>
         </form>
-        {% if message == "" and fail_message == "" %}
-        {% elif message == "" %}
-            <div id="popup" class="popup" style="background-color: #ed4337">
-                <div class="popup-text">{{ fail_message }}</div>
-            </div>
-
-        {% elif fail_message == "" %}
-            <div id="popup" class="popup" style="background-color: #02b875">
-                <div class="popup-text">{{ message }}</div>
-            </div>
-        {% endif %}
-
-        <script>
-            // Function to show the popup for 3 seconds
-            function showPopup() {
-                var popup = document.getElementById("popup");
-                popup.style.display = "block";
-                setTimeout(function () {
-                    popup.style.display = "none";
-                }, 3000); // 3 seconds
-            }
-
-            // Call the function to show the popup
-            showPopup();
-        </script>
-
     </div>
     <div class="box-2">
         <h2>Items</h2>
@@ -242,7 +216,31 @@
             {% endfor %}
         </ul>
     </div>
-
 </div>
+{% if message == "" and fail_message == "" %}
+{% elif message == "" %}
+    <div id="popup" class="popup" style="background-color: #ed4337">
+        <div class="popup-text">{{ fail_message }}</div>
+    </div>
+
+{% elif fail_message == "" %}
+    <div id="popup" class="popup" style="background-color: #02b875">
+        <div class="popup-text">{{ message }}</div>
+    </div>
+{% endif %}
+
+<script>
+    // Function to show the popup for 3 seconds
+    function showPopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "block";
+        setTimeout(function () {
+            popup.style.display = "none";
+        }, 3000); // 3 seconds
+    }
+
+    // Call the function to show the popup
+    showPopup();
+</script>
 </body>
 </html>

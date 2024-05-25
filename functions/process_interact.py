@@ -5,6 +5,8 @@ from .collect_resource import collect_resource
 
 
 def process_interact(interact, region_map_size, map_size, region_map, map, player_state, mobs_data):
+    message = ""
+    fail_message = ""
     current_biome = map["world_map"][player_state["location"][0]][player_state["location"][1]]
     biome_data = get_tile_text(current_biome)
     print(biome_data)
@@ -35,7 +37,7 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
                 region_map = run_region_gen(region_map_size, region_map_size, current_biome)
         mobs_data = move_mobs(mobs_data, region_map_size, map_size)
     else:
-        player_state, region_map = collect_resource(interact, player_state, region_map)
+        player_state, region_map, message, fail_message = collect_resource(interact, player_state, region_map)
     map["region_map"][f"{player_state['location'][0]}_{player_state['location'][1]}"] = region_map
     # make writable map
     writable_map = []
@@ -61,4 +63,4 @@ def process_interact(interact, region_map_size, map_size, region_map, map, playe
         writable_map.append(writable_map_row)
     # print(writable_map)
 
-    return writable_map, region_map, player_state, biome_data
+    return writable_map, region_map, player_state, biome_data, message, fail_message

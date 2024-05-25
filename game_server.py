@@ -76,12 +76,17 @@ async def interact(request: Request, interact: str = Form(default="")):
     global writable_map
     global region_map
     global mobs_data
-    writable_map, region_map, player_state, biome_data = process_interact(interact, region_map_size, map_size,
-                                                                          region_map, map, player_state, mobs_data)
+    writable_map, region_map, player_state, biome_data, message, fail_message = process_interact(interact,
+                                                                                                 region_map_size,
+                                                                                                 map_size,
+                                                                                                 region_map, map,
+                                                                                                 player_state,
+                                                                                                 mobs_data)
     print(player_state)
     return templates.TemplateResponse('game/interact.j2',
                                       {"request": request, "biome_data": biome_data, "writable_map": writable_map,
-                                       "player_state": player_state, "interact": interact.lower()})
+                                       "player_state": player_state, "interact": interact.lower(), "message": message,
+                                       "fail_message": fail_message})
 
 
 @app.post("/inventory")
@@ -89,7 +94,9 @@ async def inventory(request: Request, craft: str = Form(default="")):
     global player_state
     print(craft)
     player_state, message, fail_message = process_craft(craft, player_state)
-    return templates.TemplateResponse('game/inventory.j2', {'request': request, "player_state": player_state, "message": message, "fail_message": fail_message})
+    return templates.TemplateResponse('game/inventory.j2',
+                                      {'request': request, "player_state": player_state, "message": message,
+                                       "fail_message": fail_message})
 
 
 @app.get("/inventory")
