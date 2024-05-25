@@ -461,6 +461,17 @@
 
     const tiles = document.querySelectorAll('.tile');
     const hoverText = document.getElementById('hover-text');
+    tiles.forEach(tile => {
+        tile.addEventListener('mousemove', (e) => {
+            hoverText.textContent = tile.getAttribute('data-text');
+            hoverText.style.display = 'block';
+            hoverText.style.left = `${e.pageX + 10}px`;
+            hoverText.style.top = `${e.pageY + 10}px`;
+        });
+        tile.addEventListener('mouseout', () => {
+            hoverText.style.display = 'none';
+        });
+    });
 
     tiles.forEach(tile => {
         tile.addEventListener('mouseover', (e) => {
