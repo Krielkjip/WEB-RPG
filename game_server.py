@@ -74,7 +74,7 @@ async def post_index(request: Request, command: str = Form(default="")):
 
 
 @app.post("/interact")
-async def interact(request: Request, interact: str = Form(default="")):
+async def post_interact(request: Request, interact: str = Form(default="")):
     global player_state
     global writable_map
     global region_map
