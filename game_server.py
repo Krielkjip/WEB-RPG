@@ -16,7 +16,7 @@ mobs_data = []
 region_map = []
 writable_map = []
 last_interaction = 0
-map = create_map()
+maps_server = create_map()
 player_state = create_player_state()
 save_location = ""
 
@@ -39,36 +39,38 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
 
-@app.get("/index")
-async def command(request: Request, command: str):
+def handle_command(command: str, request: Request):
     global player_state
-    global map
+    global maps_server
     global mobs_data
     global save_location
     print(command)
-    state, map, player_state, mobs_data, save_location = process_command(command, map_size, region_map_size, map,
-                                                                         player_state, mobs_data, save_location)
-    world_map = map["world_map"]
+    state, maps_server, player_state, mobs_data, save_location = process_command(
+        command, map_size, region_map_size, maps_server, player_state, mobs_data, save_location
+    )
+    world_map = maps_server["world_map"]
     print(player_state)
-    return templates.TemplateResponse('game/game.j2',
-                                      {"request": request, "player_state": player_state, "map": world_map,
-                                       "state": state, "save_location": save_location, "command": command.lower()})
+    return templates.TemplateResponse(
+        'game/game.j2',
+        {
+            "request": request,
+            "player_state": player_state,
+            "map": world_map,
+            "state": state,
+            "save_location": save_location,
+            "command": command.lower()
+        }
+    )
+
+
+@app.get("/index")
+async def get_index(request: Request, command: str):
+    return handle_command(command, request)
 
 
 @app.post("/index")
-async def command(request: Request, command: str = Form(default="")):
-    global player_state
-    global map
-    global mobs_data
-    global save_location
-    print(command)
-    state, map, player_state, mobs_data, save_location = process_command(command, map_size, region_map_size, map,
-                                                                         player_state, mobs_data, save_location)
-    world_map = map["world_map"]
-    print(player_state)
-    return templates.TemplateResponse('game/game.j2',
-                                      {"request": request, "player_state": player_state, "map": world_map,
-                                       "state": state, "save_location": save_location, "command": command.lower()})
+async def post_index(request: Request, command: str = Form(default="")):
+    return handle_command(command, request)
 
 
 @app.post("/interact")
@@ -77,31 +79,42 @@ async def interact(request: Request, interact: str = Form(default="")):
     global writable_map
     global region_map
     global mobs_data
-    writable_map, region_map, player_state, biome_data, message, fail_message = process_interact(interact,
-                                                                                                 region_map_size,
-                                                                                                 map_size,
-                                                                                                 region_map, map,
-                                                                                                 player_state,
-                                                                                                 mobs_data)
+    writable_map, region_map, player_state, biome_data, message, fail_message = process_interact(
+        interact, region_map_size, map_size, region_map, maps_server, player_state, mobs_data
+    )
     print(player_state)
-    return templates.TemplateResponse('game/interact.j2',
-                                      {"request": request, "biome_data": biome_data, "writable_map": writable_map,
-                                       "player_state": player_state, "interact": interact.lower(), "message": message,
-                                       "fail_message": fail_message})
+    return templates.TemplateResponse(
+        'game/interact.j2',
+        {
+            "request": request,
+            "biome_data": biome_data,
+            "writable_map": writable_map,
+            "player_state": player_state,
+            "interact": interact.lower(),
+            "message": message,
+            "fail_message": fail_message
+        }
+    )
 
 
 @app.post("/inventory")
-async def inventory(request: Request, craft: str = Form(default="")):
+async def post_inventory(request: Request, craft: str = Form(default="")):
     global player_state
     print(craft)
     player_state, message, fail_message = process_craft(craft, player_state)
-    return templates.TemplateResponse('game/inventory.j2',
-                                      {'request': request, "player_state": player_state, "message": message,
-                                       "fail_message": fail_message})
+    return templates.TemplateResponse(
+        'game/inventory.j2',
+        {
+            'request': request,
+            "player_state": player_state,
+            "message": message,
+            "fail_message": fail_message
+        }
+    )
 
 
 @app.get("/inventory")
-async def inventory(request: Request):
+async def get_inventory(request: Request):
     global player_state
     return templates.TemplateResponse('game/inventory.j2', {'request': request, "player_state": player_state})
 

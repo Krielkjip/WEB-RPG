@@ -3,7 +3,7 @@ from .move import move_player
 from .sanitize_filename import sanitize_filename
 
 
-def process_command(command, map_size, region_map_size, map, player_state, mobs_data, save_location):
+def process_command(command, map_size, region_map_size, maps, player_state, mobs_data, save_location):
     command = command.lower()
     command = command.strip()
     player_state, world_change = move_player(command, map_size, region_map_size, player_state, "World")
@@ -14,7 +14,7 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
         else:
             save_location = command[5:]
             save_location = sanitize_filename(save_location)
-            save_game(save_location, map, player_state, mobs_data)
+            save_game(save_location, maps, player_state, mobs_data)
             print("Saving")
     elif command[:4].lower() == "load":
         if command == "load current":
@@ -24,9 +24,10 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
         else:
             save_location = command[5:]
             save_location = sanitize_filename(save_location)
-        map, player_state, mobs_data, file_not_found = load_game(command, save_location, map_size, region_map_size, map,
-                                                                 player_state,
-                                                                 mobs_data)
+        maps, player_state, mobs_data, file_not_found = load_game(command, save_location, map_size, region_map_size,
+                                                                  maps,
+                                                                  player_state,
+                                                                  mobs_data)
         if file_not_found:
             state["file_not_found"] = True
         print("Loading")
@@ -34,4 +35,4 @@ def process_command(command, map_size, region_map_size, map, player_state, mobs_
         state['error_msg'] = "Please enter a command"
     state['command'] = command
     print(state)
-    return state, map, player_state, mobs_data, save_location
+    return state, maps, player_state, mobs_data, save_location
