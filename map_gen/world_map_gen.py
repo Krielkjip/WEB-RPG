@@ -1,28 +1,25 @@
 import random
 
+# The number of volcanoes to generate
 volcano_amount = 3
 
+# List of biomes
 biomes = ["Grassland", "Forest", "Mountain", "Ocean", "Desert", "Rainforest", "Temperate Forest", "Tundra", "Taiga",
           "Taiga Forest", "Savanna", "Volcano"]
 
-# Biome characters dictionary
-biome_characters = {
-    "Grassland": "G",
-    "Forest": "F",
-    "Mountain": "M",
-    "Ocean": "O",
-    "Desert": "D",
-    "Rainforest": "R",
-    "Temperate Forest": "W",
-    "Tundra": "A",
-    "Taiga": "T",
-    "Taiga Forest": "C",
-    "Savanna": "S",
-    "Volcano": "V"
-}
-
 
 def generate_terrain(height, width):
+    """
+    Generates a 2D grid of terrain types.
+
+    Args:
+        height (int): The height of the grid.
+        width (int): The width of the grid.
+
+    Returns:
+        list: A 2D list of terrain types.
+    """
+    # Weights for each biome
     terrain_weights = {
         "Grassland": 5,
         "Forest": 4,
@@ -71,6 +68,7 @@ def generate_terrain(height, width):
     for x in range(width):
         row = []
         for y in range(height):
+            # Generate random terrain based on y-coordinate
             if y <= height / 4 - 1:
                 row.append(random.choices(terrain_types, weights=list(terrain_weights_cold.values()))[0])
             elif y >= height / 4 * 3:
@@ -79,6 +77,7 @@ def generate_terrain(height, width):
                 row.append(random.choices(terrain_types, weights=list(terrain_weights.values()))[0])
         weighted_terrain.append(row)
 
+    # Randomly place volcanoes
     for i in range(volcano_amount):
         x = random.randint(0, width - 1)
         y = random.randint(0, height - 1)
@@ -87,10 +86,30 @@ def generate_terrain(height, width):
 
 
 def count(neighbors, what_biome):
+    """
+    Counts the number of neighbors that match a certain biome.
+
+    Args:
+        neighbors (list): A list of neighboring biomes.
+        what_biome (str): The biome to count.
+
+    Returns:
+        int: The count of neighboring biomes that match what_biome.
+    """
     return sum(1 for neighbor in neighbors if neighbor == what_biome)
 
 
 def modify_biome(new_biome, neighbors):
+    """
+    Checks if a biome should be modified based on its neighbors.
+
+    Args:
+        new_biome (str): The new biome to check.
+        neighbors (list): A list of neighboring biomes.
+
+    Returns:
+        bool: True if the biome should be modified, False otherwise.
+    """
     percent_chance = 25
     biome_count = count(neighbors, new_biome)
     if biome_count > 0:
@@ -101,8 +120,15 @@ def modify_biome(new_biome, neighbors):
             return True
 
 
-# Function to modify terrain based on certain conditions
 def modify_terrain(terrain_grid, height, width):
+    """
+    Modifies the terrain grid based on certain conditions.
+
+    Args:
+        terrain_grid (list): The 2D list of terrain types.
+        height (int): The height of the grid.
+        width (int): The width of the grid.
+    """
     for x in range(width):
         for y in range(height):
             current_biome = terrain_grid[x][y]
@@ -169,18 +195,33 @@ def modify_terrain(terrain_grid, height, width):
 
 # Main function to generate, modify and display terrain
 def main(height, width):
+    """
+    Generates, modifies and displays terrain.
+
+    Args:
+        height (int): The height of the grid.
+        width (int): The width of the grid.
+
+    Returns:
+        list: The modified terrain grid.
+    """
     terrain_grid = generate_terrain(height, width)
-    # display_terrain(terrain_grid)
     for x in range(1):
         modify_terrain(terrain_grid, height, width)
-        # print("\nTerrain Map after Modification:")
-        # display_terrain(terrain_grid, height, width)
-        # print("\nTerrain Map as a List:")
 
     return terrain_grid
 
 
 def run_world_gen(height, width):
+    """
+    Runs the world generation process.
+
+    Args:
+        height (int): The height of the grid.
+        width (int): The width of the grid.
+
+    Returns:
+        list: The modified terrain grid.
+    """
     world_map = main(height, width)
-    # print(world_map)
     return world_map

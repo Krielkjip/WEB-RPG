@@ -1,4 +1,15 @@
 def get_tile_text(current_tile):
+    """
+    Returns a description of the current tile.
+
+    Args:
+        current_tile (str): The name of the current tile.
+
+    Returns:
+        str: A description of the current tile, or None if the tile is not recognized.
+    """
+
+    # Define a dictionary of biome descriptions
     biome_descriptions = {
         "Taiga Forest": ["Taiga Forest", "You are in a Taiga Forest",
                          "A vast expanse of cold coniferous forest, primarily spruce, fir, and pine, blanketed in "
@@ -59,4 +70,5 @@ def get_tile_text(current_tile):
                     ["Lions", "Giraffes", "Elephants"]]
     }
 
+    # Return the description of the current tile
     return biome_descriptions.get(current_tile, None)

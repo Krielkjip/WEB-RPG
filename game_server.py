@@ -1,6 +1,8 @@
+# Import necessary modules
 import os
 from pathlib import Path
 
+# Import FastAPI and related modules
 import uvicorn
 from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,11 +10,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 
+# Import custom functions from another file
 from functions import *
 
+# Set up game constants
 map_size = 16
 region_map_size = 8
-mobs_data = []
+
+# Initialize game state variables
+mobs_data = {}
 region_map = []
 writable_map = []
 last_interaction = 0
@@ -23,9 +29,11 @@ save_location = ""
 # Get the directory of the current Python script
 current_dir = Path(__file__).resolve().parent
 
+# Create a FastAPI app
 app = FastAPI()
-origins = ["*"]
 
+# Set up CORS middleware to allow cross-origin requests
+origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -34,12 +42,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Set up Jinja2 templates
 templates = Jinja2Templates(directory="templates")
 
+# Mount static files
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
 
+# Define a function to handle commands
 def handle_command(command: str, request: Request):
+    """
+    Handle a command from the user
+    :param command: The command to process
+    :param request: The request object
+    :return: A rendered template response
+    """
     global player_state
     global maps_server
     global mobs_data
@@ -63,18 +80,37 @@ def handle_command(command: str, request: Request):
     )
 
 
+# Define routes for the app
 @app.get("/index")
 async def get_index(request: Request, command: str):
+    """
+    Handle GET requests to /index
+    :param request: The request object
+    :param command: The command to process
+    :return: A rendered template response
+    """
     return handle_command(command, request)
 
 
 @app.post("/index")
 async def post_index(request: Request, command: str = Form(default="")):
+    """
+    Handle POST requests to /index
+    :param request: The request object
+    :param command: The command to process
+    :return: A rendered template response
+    """
     return handle_command(command, request)
 
 
 @app.post("/interact")
 async def post_interact(request: Request, interact: str = Form(default="")):
+    """
+    Handle POST requests to /interact
+    :param request: The request object
+    :param interact: The interaction to process
+    :return: A rendered template response
+    """
     global player_state
     global writable_map
     global region_map
@@ -99,6 +135,12 @@ async def post_interact(request: Request, interact: str = Form(default="")):
 
 @app.post("/inventory")
 async def post_inventory(request: Request, craft: str = Form(default="")):
+    """
+    Handle POST requests to /inventory
+    :param request: The request object
+    :param craft: The crafting action to process
+    :return: A rendered template response
+    """
     global player_state
     print(craft)
     player_state, message, fail_message = process_craft(craft, player_state)
@@ -115,6 +157,11 @@ async def post_inventory(request: Request, craft: str = Form(default="")):
 
 @app.get("/inventory")
 async def get_inventory(request: Request):
+    """
+    Handle GET requests to /inventory
+    :param request: The request object
+    :return: A rendered template response
+    """
     global player_state
     return templates.TemplateResponse('game/inventory.j2', {'request': request, "player_state": player_state})
 
@@ -122,9 +169,9 @@ async def get_inventory(request: Request):
 @app.get("/")
 async def root(request: Request):
     """
-    Handle initial landing page with nothing on the url, render index.j2
-    :param request: request from client
-    :return: rendered index.j2
+    Handle GET requests to the root URL
+    :param request: The request object
+    :return: A rendered template response
     """
     folder_path = 'save_data'
     items = os.listdir(folder_path)
@@ -135,12 +182,10 @@ async def root(request: Request):
 @app.get("/{path:path}")
 async def handle_request(path: str, request: Request):
     """
-    Handle all not specified requests from client
-    :param path: requested path
-    :param request: full request from client
-    :return: processed template at path,
-            if not found: return the file from the static folder
-            if not found: return the 404-error.html (Not Found)
+    Handle GET requests to any other URL
+    :param path: The requested path
+    :param request: The request object
+    :return: A rendered template response or a static file
     """
     print(path, current_dir)
     # Try to serve the requested file from /templates folder
@@ -166,4 +211,5 @@ async def handle_request(path: str, request: Request):
 
 
 if __name__ == "__main__":
+    # Run the app with uvicorn
     uvicorn.run(app, port=8000)
