@@ -5,27 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
     <style>
+        /* Ensure the HTML and body elements take up the full height of the viewport and have no margin */
         html, body {
             height: 100%;
             margin: 0;
         }
 
+        /* Set the background and text color of the body */
         body {
             background-color: #18191a;
             color: white;
         }
 
+        /* Styling for error messages */
         .error {
             border: 2px solid red;
             padding: 5px;
             display: inline-block;
         }
 
+        /* Styling for error icons */
         .error-icon {
             color: red;
             margin-right: 5px;
         }
 
+        /* Styling for the top navigation bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -36,30 +41,36 @@
             border-bottom: 2px solid white;
         }
 
+        /* Container for buttons in the top bar */
         .top-bar .buttons-container {
             display: flex;
             gap: 20px;
         }
 
+        /* Additional styling for buttons in the top bar */
         .top-bar button {
             margin-left: auto;
         }
 
+        /* Main container for the page content */
         .container {
             display: flex;
             flex: 1;
             height: calc(100% - 82px);
         }
 
+        /* Styling for left and right boxes in the main container */
         .box-1, .box-2 {
             flex: 1;
             padding-left: 20px;
         }
 
+        /* Add border to the right side of the left box */
         .box-1 {
             border-right: 2px solid white;
         }
 
+        /* Modal window styling */
         .modal {
             display: none;
             position: fixed;
@@ -72,6 +83,7 @@
             background-color: rgba(0, 0, 0, 0.8);
         }
 
+        /* Modal content styling */
         .modal-content {
             background-color: #3c1178;
             margin: 15% auto;
@@ -83,6 +95,7 @@
             border-radius: 5px;
         }
 
+        /* Additional modal content styling for information modals */
         .modal-content-info {
             background-color: #3c1178;
             margin: 10% auto;
@@ -94,6 +107,7 @@
             border-radius: 5px;
         }
 
+        /* Styling for purple buttons */
         .button_purple {
             padding: 10px;
             cursor: pointer;
@@ -104,6 +118,7 @@
             border-radius: 5px;
         }
 
+        /* Styling for movement buttons */
         .button_move {
             padding: 10px;
             cursor: pointer;
@@ -116,6 +131,7 @@
             border-radius: 5px;
         }
 
+        /* Styling for gray buttons */
         .button_gray {
             padding: 10px;
             cursor: pointer;
@@ -126,12 +142,14 @@
             border-radius: 5px;
         }
 
+        /* Container for command buttons */
         .commands-container {
             display: flex;
             gap: 10px;
             align-items: center;
         }
 
+        /* Tooltip styling */
         #hover-text {
             display: none;
             position: absolute;
@@ -145,6 +163,7 @@
             border-radius: 5px;
         }
 
+        /* Card styling */
         .card {
             background-color: #18191a;
             border: 2px solid white;
@@ -157,11 +176,13 @@
             margin-right: 20px;
         }
 
+        /* Profile picture styling */
         .profile-pic {
             width: 100%;
             height: auto;
         }
 
+        /* Additional text styling */
         .name {
             margin-bottom: 0;
         }
@@ -175,17 +196,21 @@
 <div class="top-bar">
     <h1>World Map</h1>
     <div class="buttons-container">
+        <!-- Display the save button if a save location is provided -->
         {% if save_location != "" %}
             <form action="/index" method="POST">
                 <button class="button_gray" type="submit" name="command" value="save {{ save_location }}">Save
                     to: {{ save_location }}</button>
             </form>
         {% endif %}
+        <!-- Button to open the quit game modal -->
         <button class="button_gray" id="openModalBtn">Quit Game</button>
 
+        <!-- Quit game modal structure -->
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <p>You are about to quit the game do you wish to save before quitting?</p>
+                <!-- Display save option if a save location is provided -->
                 {% if save_location != "" %}
                     <form id="saveForm" action="/index" method="POST">
                         <input type="hidden" name="command" value="save {{ save_location }}">
@@ -209,9 +234,11 @@
     <div class="box-1">
         <h2>World Map</h2>
 
+        <!-- Display a message if the map is not available -->
         {% if map is none %}
             <p>Map is null</p>
         {% else %}
+            <!-- Define the type map with terrain types and their display properties -->
             {% set type_map = {'Taiga': {'char': 'T', 'color': 'white'},
                       'Rainforest': {'char': 'R', 'color': 'forestgreen'},
                       'Grassland': {'char': 'G', 'color': 'lightgreen'},
@@ -226,6 +253,7 @@
                       'Savanna': {'char': 'S', 'color': 'khaki'}} %}
 
             <style>
+                /* Grid item styling for the map */
                 .grid-item {
                     width: 15px;
                     height: 15px;
@@ -235,6 +263,7 @@
                     text-align: center;
                 }
 
+                /* Player tile styling */
                 .player {
                     width: 15px;
                     height: 15px;
@@ -245,6 +274,7 @@
                     padding: 2px;
                 }
 
+                /* Table styling for the map grid */
                 table {
                     border-collapse: collapse;
                 }
@@ -252,17 +282,20 @@
             {% set map_size = map|length %}
             <span id="hover-text"></span>
             <table>
+                <!-- Loop through the map rows and columns to display the map -->
                 {% for y in range(map_size) %}
                     <tr>
                         {% for x in range(map_size) %}
                             {% set item = map[x][y] %}
                             {% set type_info = type_map[item] %}
+                            <!-- Display player tile with different styling -->
                             {% if player_state["location"][0] == x and player_state["location"][1] == y %}
                                 <td class="player tile"
                                     style="color:{{ type_info['color'] }}"
                                     data-text="{{ item }}">{{ type_info['char'] }}
                                 </td>
                             {% else %}
+                                <!-- Display regular grid item -->
                                 <td class="grid-item tile"
                                     style="color:{{ type_info['color'] }}"
                                     data-text="{{ item }}">{{ type_info['char'] }}
@@ -276,6 +309,7 @@
     </div>
 
     <div class="box-2">
+        <!-- Display error messages if any -->
         {% if state.error_msg %}
             <br/>
             <div class="error">
@@ -291,6 +325,7 @@
             <br>
         {% endif %}
 
+        <!-- Form to send text command -->
         <h2>Send Text Command</h2>
         <form action="/index" method="POST">
             <label for="command">Enter command:</label><br>
@@ -298,6 +333,7 @@
             <input class="button_purple" type="submit" value="Submit">
         </form>
 
+        <!-- Movement buttons -->
         <H2>Move</H2>
         <form action="/index" method="POST">
             <button class="button_move" style="margin-left: 44px;" type="submit" name="command" value="Move Up">↑
@@ -311,19 +347,24 @@
             </button>
         </form>
 
+        <!-- Command buttons -->
         <h2>Commands</h2>
         <div class="commands-container">
+            <!-- Form to interact with regions -->
             <form action="/interact" method="POST">
                 <button class="button_purple" type="submit" name="interact" value="Interact Get Region">Interact
                 </button>
             </form>
+            <!-- Button to view inventory -->
             <button class="button_purple" onclick="location.href='/inventory'">Inventory</button>
+            <!-- Button to open help modal -->
             <button class="button_purple" id="helpBtn">Help</button>
-            <!-- Add a new button to open the info modal -->
+            <!-- Button to open info modal -->
             <button id="infoBtn" class="button_purple" type="button">Info</button>
         </div>
         {% if command == "help" %}
         {% endif %}
+        <!-- Help modal -->
         <div id="myModalHelp" class="modal">
             <div class="modal-content">
                 <h2>Commands:</h2>
@@ -350,11 +391,11 @@
             </div>
         </div>
 
-        <!-- Add the info modal content -->
+        <!-- Info modal -->
         <div id="myModalInfo" class="modal">
             <div class="modal-content-info">
                 <h2>Game Information</h2>
-                <p>RuneQuest is a text based game rpg game.</p>
+                <p>RuneQuest is a text based RPG game.</p>
                 <h3>Developers:</h3>
                 <div class="card">
                     <img src="/statics/OnnoteVoortwis.png" alt="Profile Picture" class="profile-pic">
@@ -376,102 +417,115 @@
 </div>
 </body>
 <script>
+    // Function to save form data and redirect
     function saveAndRedirect() {
         const form = document.getElementById('saveForm');
         const formData = new FormData(form);
 
+        // Send form data to server
         fetch('/index', {
             method: 'POST',
             body: formData
         }).then(response => {
+            // If save is successful, redirect to home page
             if (response.ok) {
                 window.location.href = '/';
             } else {
+                // If save fails, show alert
                 alert('Save failed!');
             }
         }).catch(error => {
+            // If there's an error, log it and show alert
             console.error('Error:', error);
             alert('Save failed!');
         });
     }
 
-    // Get the modal
+    // Get the modal for general purpose
     const modal = document.getElementById("myModal");
 
-    // Get the button that opens the modal
+    // Get the button that opens the general modal
     const btn = document.getElementById("openModalBtn");
 
-    // Get the <span> element that closes the modal
+    // Get the <span> element that closes the general modal
     const span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks on the button, open the modal
+    // Event listener for opening the general modal
     btn.onclick = function () {
         modal.style.display = "block";
     }
 
-    // When the user clicks on <span> (x), close the modal
+    // Event listener for closing the general modal
     span.onclick = function () {
         modal.style.display = "none";
     }
 
-    // Get the modal
+    // Get the modal for help
     const modalHelp = document.getElementById("myModalHelp");
 
-    // Get the button that opens the modal
+    // Get the button that opens the help modal
     const btnHelp = document.getElementById("helpBtn");
 
-    // Get the <span> element that closes the modal
+    // Get the <span> element that closes the help modal
     const spanHelp = document.getElementsByClassName("close")[1];
 
-    // When the user clicks on the button, open the modal
+    // Event listener for opening the help modal
     btnHelp.onclick = function () {
         modalHelp.style.display = "block";
     }
 
-    // When the user clicks on <span> (x), close the modal
+    // Event listener for closing the help modal
     spanHelp.onclick = function () {
         modalHelp.style.display = "none";
+        // Focus on input after help modal is closed
         document.getElementById("command").focus();
     }
 
-    // Check condition and open modal if true
+    // Check condition and open help modal if true
     {% if command == "help" or command == "h" %}
         modalHelp.style.display = "block";
+        // Blur input after help modal is shown
         setTimeout(blur, 50);
     {% endif %}
 
+    // Function to unfocus on text input
     function blur() {
         document.getElementById("command").blur();
     }
 
-    // Get the modal
+    // Get the modal for information
     const modalInfo = document.getElementById("myModalInfo");
 
-    // Get the button that opens the modal
+    // Get the button that opens the information modal
     const infoBtn = document.getElementById("infoBtn");
 
-    // Get the span element that closes the modal
+    // Get the span element that closes the information modal
     const closeInfoBtn = document.getElementById("closeInfoBtn");
 
-    // Add event listeners
+    // Event listener for opening the information modal
     infoBtn.addEventListener("click", () => {
         modalInfo.style.display = "block";
     });
 
+    // Event listener for closing the information modal
     closeInfoBtn.onclick = function () {
         modalInfo.style.display = "none";
+        // Focus on input after information modal is closed
         document.getElementById("command").focus();
     }
 
-    // Check condition and open modal if true
+    // Check condition and open information modal if true
     {% if command == "info" %}
         modalInfo.style.display = "block";
+        // Blur input after information modal is shown
         setTimeout(blur, 50);
     {% endif %}
 
+    // Get all tiles
     const tiles = document.querySelectorAll('.tile');
     const hoverText = document.getElementById('hover-text');
 
+    // Add event listeners for hover functionality on tiles
     tiles.forEach(tile => {
         tile.addEventListener('mousemove', (e) => {
             hoverText.textContent = tile.getAttribute('data-text');
@@ -483,5 +537,6 @@
             hoverText.style.display = 'none';
         });
     });
+
 </script>
 </html>

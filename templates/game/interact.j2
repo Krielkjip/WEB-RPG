@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta information and title -->
     <meta charset="UTF-8">
     <title>Interact</title>
     <style>
+        /* Basic styling for html and body */
         html, body {
             height: 100%;
             margin: 0;
@@ -19,6 +21,7 @@
             word-wrap: break-word;
         }
 
+        /* Styling for the top bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -29,6 +32,7 @@
             border-bottom: 2px solid white;
         }
 
+        /* Main container styling */
         .container {
             display: flex;
             flex: 1;
@@ -44,6 +48,7 @@
             border-right: 2px solid white;
         }
 
+        /* Button styling */
         .button_purple {
             padding: 10px;
             cursor: pointer;
@@ -76,6 +81,7 @@
             border-radius: 5px;
         }
 
+        /* Tooltip styling */
         #hover-text {
             display: none;
             position: absolute;
@@ -95,6 +101,7 @@
             align-items: center;
         }
 
+        /* Modal styling */
         .modal {
             display: none;
             position: fixed;
@@ -178,14 +185,16 @@
 <body>
 <div class="top-bar">
     <h1>Interact</h1>
+    <!-- Button to go back to the map -->
     <button class="button_gray" onclick="location.href='/index?command=load current'">Back to map</button>
 </div>
-
 <div class="container">
     <div class="box-1">
+        <!-- Display biome data -->
         <h2>{{ biome_data[1] }}</h2>
         <p class="short-text">{{ biome_data[2] }}</p>
 
+        <!-- Conditional display based on region_map -->
         {% if region_map is none %}
             <p>Region Map is null</p>
         {% else %}
@@ -198,7 +207,7 @@
     'Water': {'char': '~', 'color': 'cyan'},
     'Rock': {'char': 'R', 'color': 'gray'},
     'Moss': {'char': 'M', 'color': 'green'},
-    'Dead Tree': {'char': 'T', 'color': 'yellow'},
+    'Dead Tree': {'char': 'T', 'color': 'Chocolate'},
     'Fungi Tree': {'char': 'T', 'color': 'magenta'},
     'Fungi': {'char': 'F', 'color': 'violet'},
     'Iron Ore': {'char': 'I', 'color': 'orangered'},
@@ -210,8 +219,8 @@
     'Cactus': {'char': 'C', 'color': 'lightgreen'},
     'Empty': {'char': '#', 'color': 'gray'},
     'Coal Ore': {'char': 'C', 'color': 'black'},
-    'Mud': {'char': 'M', 'color': 'yellow'},
-    'Dead Bush': {'char': 'B', 'color': 'yellow'},
+    'Mud': {'char': 'M', 'color': 'Chocolate'},
+    'Dead Bush': {'char': 'B', 'color': 'Chocolate'},
     'Magma': {'char': '~', 'color': 'darkorange'},
     'Ash': {'char': '~', 'color': 'gray'},
     'Ash Rock': {'char': 'A', 'color': 'gray'},
@@ -222,6 +231,7 @@
     'Chicken': {'char': 'C', 'color': 'GoldenRod'}
 } %}
             <style>
+                /* General grid item styling */
                 .grid-item {
                     width: 15px;
                     height: 15px;
@@ -231,6 +241,7 @@
                     text-align: center;
                 }
 
+                /* player styling */
                 .player {
                     width: 15px;
                     height: 15px;
@@ -250,7 +261,9 @@
                 }
             </style>
             {% set region_map_size = writable_map|length %}
+            <!-- show hover text -->
             <span id="hover-text"></span>
+            <!-- make region table -->
             <table>
                 {% for y in range(region_map_size) %}
                     <tr>
@@ -262,6 +275,7 @@
                             {% set type_info_mob = type_mobs[mob] %}
                             {% if found_mob %}
                                 {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
+                                    <!-- Player's current location with mob -->
                                     <td class="player">
                                 <span class="blinkingText tile"
                                       style="color:{{ type_info_mob['color'] }}"
@@ -271,6 +285,7 @@
                                               data-text="{{ tile }}">{{ type_info_map['char'] }}</span>
                                     </td>
                                 {% else %}
+                                    <!-- Mob display -->
                                     <td class="grid-item">
                                 <span class="blinkingText tile"
                                       style="color:{{ type_info_mob['color'] }}"
@@ -282,11 +297,13 @@
 
                                 {% endif %}
                             {% else %}
+                                <!-- Player's current location without mob -->
                                 {% if player_state["region_location"][0] == x and player_state["region_location"][1] == y %}
                                     <td class="player tile"
                                         style="color:{{ type_info_map['color'] }}"
                                         data-text="{{ tile }}">{{ type_info_map['char'] }}</td>
                                 {% else %}
+                                    <!-- Regular tile -->
                                     <td class="grid-item tile"
                                         style="color:{{ type_info_map['color'] }}"
                                         data-text="{{ tile }}">{{ type_info_map['char'] }}</td>
@@ -300,6 +317,12 @@
     </div>
 
     <div class="box-2">
+        <!--
+        Text commands
+        move Buttons
+        gather resources commands
+        Help and Info button
+        -->
         <h2>Send Text Command</h2>
         <form action="/interact" method="POST">
             <label for="interact">Enter command:</label><br>
@@ -335,6 +358,7 @@
             <button class="button_purple" id="helpBtn">Help</button>
             <button id="infoBtn" class="button_purple" type="button">Info</button>
         </div>
+        <!-- Help modal -->
         <div id="myModalHelp" class="modal">
             <div class="modal-content">
                 <h2>Commands:</h2>
@@ -353,7 +377,7 @@
                 <span class="close button_gray" id="closeHelpBtn">Go Back</span>
             </div>
         </div>
-
+        <!-- Info modal -->
         <div id="myModalInfo" class="modal">
             <div class="modal-content-info">
                 <h2>Game Information</h2>
@@ -376,12 +400,13 @@
         </div>
     </div>
 </div>
+<!-- Success message if you collected something -->
 {% if message == "" and fail_message == "" %}
 {% elif message == "" %}
     <div id="popup" class="popup" style="background-color: #ed4337">
         <div class="popup-text">{{ fail_message }}</div>
     </div>
-
+    <!-- Fail message if your attempt at collecting something failed -->
 {% elif fail_message == "" %}
     <div id="popup" class="popup" style="background-color: #02b875">
         <div class="popup-text">{{ message }}</div>
@@ -404,6 +429,7 @@
 </body>
 
 <script>
+    // Help modal
     // Get the modal
     const modalHelp = document.getElementById("myModalHelp");
 
@@ -421,6 +447,7 @@
     // When the user clicks on <span> (x), close the modal
     closeHelpBtn.onclick = function () {
         modalHelp.style.display = "none";
+        // Refocus on text input
         document.getElementById("command").focus();
     }
 
@@ -430,10 +457,13 @@
         setTimeout(blur, 50);
     {% endif %}
 
+    // Function to unfocus on typing input if you open a modal so that you cant send commands anymore
     function blur() {
         document.getElementById("command").blur();
     }
 
+
+    // Info modal
     // Get the modal
     const modalInfo = document.getElementById("myModalInfo");
 
@@ -450,6 +480,7 @@
 
     closeInfoBtn.onclick = function () {
         modalInfo.style.display = "none";
+        // Refocus on text input
         document.getElementById("command").focus();
     }
 
@@ -459,40 +490,63 @@
         setTimeout(blur, 50);
     {% endif %}
 
+    // Select all elements with the class 'tile'
     const tiles = document.querySelectorAll('.tile');
+    // Select the element with the ID 'hover-text'
     const hoverText = document.getElementById('hover-text');
+
+    // Add event listeners for each tile to handle mouse movement and mouse out events
     tiles.forEach(tile => {
         tile.addEventListener('mousemove', (e) => {
+            // Update the hoverText content with the data-text attribute of the hovered tile
             hoverText.textContent = tile.getAttribute('data-text');
+            // Make hoverText visible
             hoverText.style.display = 'block';
+            // Position hoverText near the mouse cursor
             hoverText.style.left = `${e.pageX + 10}px`;
             hoverText.style.top = `${e.pageY + 10}px`;
         });
+
         tile.addEventListener('mouseout', () => {
+            // Hide hoverText when the mouse leaves the tile
             hoverText.style.display = 'none';
         });
     });
 
+    // Add event listeners for each tile to handle mouse over and mouse out events
+    // This block appears to duplicate the functionality above and might be redundant
     tiles.forEach(tile => {
         tile.addEventListener('mouseover', (e) => {
+            // Update the hoverText content with the data-text attribute of the hovered tile
             hoverText.textContent = tile.getAttribute('data-text');
+            // Make hoverText visible
             hoverText.style.display = 'block';
+            // Position hoverText near the mouse cursor
             hoverText.style.left = `${e.pageX + 10}px`;
             hoverText.style.top = `${e.pageY + 10}px`;
         });
+
         tile.addEventListener('mouseout', () => {
+            // Hide hoverText when the mouse leaves the tile
             hoverText.style.display = 'none';
         });
     });
+
+    // Set an interval to toggle the visibility of elements with the classes 'blinkingText' and 'hiddenText' every 500ms
     setInterval(function () {
+        // Select all elements with the class 'blinkingText'
         const blinkingTexts = document.querySelectorAll(".blinkingText");
+        // Select all elements with the class 'hiddenText'
         const hiddenTexts = document.querySelectorAll(".hiddenText");
 
+        // Loop through each blinkingText element
         blinkingTexts.forEach(function (blinkingText, index) {
             if (blinkingText.style.display === "none") {
+                // Show the blinkingText and hide the corresponding hiddenText
                 blinkingText.style.display = "inline";
                 hiddenTexts[index].style.display = "none";
             } else {
+                // Hide the blinkingText and show the corresponding hiddenText
                 blinkingText.style.display = "none";
                 hiddenTexts[index].style.display = "inline";
             }

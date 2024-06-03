@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Specifies the character encoding for the HTML document -->
     <meta charset="UTF-8">
+    <!-- Title of the webpage -->
     <title>RuneQuest</title>
+    <!-- Internal CSS to style the HTML elements -->
     <style>
+        /* Set height and remove margins for html and body */
         html, body {
             height: 100%;
             margin: 0;
         }
 
+        /* Style for the body element */
         body {
             background-color: #18191a;
             color: white;
         }
 
+        /* Style for the top bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -24,22 +30,26 @@
             border-bottom: 2px solid white;
         }
 
+        /* Style for the main container */
         .container {
             display: flex;
             flex: 1;
             height: calc(100% - 82px);
         }
 
+        /* Style for the content boxes inside the container */
         .box-1, .box-2 {
             flex: 1;
             padding-left: 20px;
             padding-right: 20px;
         }
 
+        /* Style for the first content box */
         .box-1 {
             border-right: 2px solid white;
         }
 
+        /* Style for the buttons */
         .button_purple {
             padding: 10px;
             cursor: pointer;
@@ -52,88 +62,93 @@
     </style>
 </head>
 <body>
-<div class="top-bar">
-    <h1>RuneQuest</h1>
-</div>
-
-<div class="container">
-    <div class="box-1">
-        <h2>About the game</h2>
-        <strong>Title:</strong> RuneQuest<br>
-        <strong>Developer:</strong> Onno te Voortwis<br>
-        <strong>Genre:</strong> 2D Text-Based Grid RPG<br>
-        <strong>Gameplay:</strong> Crafting, Collecting, PvE
-        <p>RuneQuest, developed by Onno te Voortwis, is a captivating 2D text-based RPG set in a dynamically generated
-            grid world. Players are immersed in a realm where strategic exploration, extensive crafting, resource
-            collection, and thrilling PvE battles intertwine to create a richly detailed and engaging adventure.
-
-        <h2>Gameplay Mechanics</h2>
-        <ol>
-            <li>
-                <h3>Grid-Based Exploration:</h3>
-                <ul>
-                    <li><strong>Grid Movement:</strong> The game world is divided into a grid, with each cell
-                        representing different terrain types, resources, or challenges. Players navigate the grid using
-                        text commands (e.g., "move north", "move east"), or use the buttons to move. The player can
-                        move between regions by walking through the boarder in a region or by fast travel in the world
-                        map.
-                    </li>
-                    <li><strong>Dynamic Environments:</strong> Each cell can host forests, mountains, lakes, offering a
-                        diverse landscape to explore.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h3>Resource Collection:</h3>
-                <ul>
-                    <li><strong>Gathering:</strong> Players collect resources by moving into specific cells. Forests may
-                        yield wood, mountains provide ores.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h3>Crafting System:</h3>
-                <ul>
-                    <li><strong>Recipes and Blueprints:</strong> Players can craft tools, weapons, armor, and various
-                        items using collected resources.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h3>Player vs Environment (PvE):</h3>
-                <ul>
-                    <li><strong>Combat Encounters:</strong> Players Fight mobs by moving on top of them. Mobs can be
-                        found in every biome.
-                    </li>
-                    <li><strong>Mob movement:</strong>The mobs in the game can freely travel between regions by going
-                        through the region boarder.
-                    </li>
-                </ul>
-            </li>
-
-        </ol>
+    <!-- Top bar containing the title -->
+    <div class="top-bar">
+        <h1>RuneQuest</h1>
     </div>
 
-    <div class="box-2">
-        <h2>Start a New Game</h2>
-        <form action="/index" method="GET">
-            <input type="hidden" name="command" value="load fresh">
-            <button class="button_purple" type="submit">New Game</button>
-        </form>
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Box 1: About the game and gameplay mechanics -->
+        <div class="box-1">
+            <h2>About the game</h2>
+            <strong>Title:</strong> RuneQuest<br>
+            <strong>Developer:</strong> Onno te Voortwis<br>
+            <strong>Genre:</strong> 2D Text-Based Grid RPG<br>
+            <strong>Gameplay:</strong> Crafting, Collecting, PvE
+            <p>RuneQuest, developed by Onno te Voortwis, is a captivating 2D text-based RPG set in a dynamically generated
+                grid world. Players are immersed in a realm where strategic exploration, extensive crafting, resource
+                collection, and thrilling PvE battles intertwine to create a richly detailed and engaging adventure.</p>
 
-        <br/>
-        <h2>Save files:</h2>
-        <ul>
-            {% for item in items %}
+            <h2>Gameplay Mechanics</h2>
+            <ol>
                 <li>
-                    <form action="/index" method="GET">
-                        <input type="hidden" name="command" value="load {{ item }}">
-                        <button class="button_purple" type="submit">{{ item[:-5] }}</button>
-                    </form>
+                    <h3>Grid-Based Exploration:</h3>
+                    <ul>
+                        <li><strong>Grid Movement:</strong> The game world is divided into a grid, with each cell
+                            representing different terrain types, resources, or challenges. Players navigate the grid using
+                            text commands (e.g., "move north", "move east"), or use the buttons to move. The player can
+                            move between regions by walking through the border in a region or by fast travel in the world
+                            map.
+                        </li>
+                        <li><strong>Dynamic Environments:</strong> Each cell can host forests, mountains, lakes, offering a
+                            diverse landscape to explore.
+                        </li>
+                    </ul>
                 </li>
-            {% endfor %}
-        </ul>
+                <li>
+                    <h3>Resource Collection:</h3>
+                    <ul>
+                        <li><strong>Gathering:</strong> Players collect resources by moving into specific cells. Forests may
+                            yield wood, mountains provide ores.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>Crafting System:</h3>
+                    <ul>
+                        <li><strong>Recipes and Blueprints:</strong> Players can craft tools, weapons, armor, and various
+                            items using collected resources.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>Player vs Environment (PvE):</h3>
+                    <ul>
+                        <li><strong>Combat Encounters:</strong> Players fight mobs by moving on top of them. Mobs can be
+                            found in every biome.
+                        </li>
+                        <li><strong>Mob movement:</strong> The mobs in the game can freely travel between regions by going
+                            through the region border.
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Box 2: Start a new game and load save files -->
+        <div class="box-2">
+            <h2>Start a New Game</h2>
+            <!-- Form to start a new game -->
+            <form action="/index" method="GET">
+                <input type="hidden" name="command" value="load fresh">
+                <button class="button_purple" type="submit">New Game</button>
+            </form>
+
+            <br/>
+            <h2>Save files:</h2>
+            <ul>
+                <!-- Loop to display save files dynamically -->
+                {% for item in items %}
+                    <li>
+                        <form action="/index" method="GET">
+                            <input type="hidden" name="command" value="load {{ item }}">
+                            <button class="button_purple" type="submit">{{ item[:-5] }}</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-</div>
 </body>
 </html>

@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Specifies the character encoding for the HTML document -->
     <meta charset="UTF-8">
+    <!-- Title of the webpage -->
     <title>Interact</title>
+    <!-- Internal CSS to style the HTML elements -->
     <style>
+        /* Set height and remove margins for html and body */
         html, body {
             height: 100%;
             margin: 0;
         }
 
+        /* Style for the body element */
         body {
             background-color: #18191a;
             color: white;
         }
 
+        /* Style for the top bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -24,26 +30,31 @@
             border-bottom: 2px solid white;
         }
 
+        /* Style for the main container */
         .container {
             display: flex;
             flex: 1;
             height: calc(100% - 82px);
         }
 
+        /* Style for the content boxes inside the container */
         .box-1, .box-2 {
             flex: 1;
             padding-left: 20px;
         }
 
+        /* Style for the first content box */
         .box-1 {
             border-right: 2px solid white;
         }
 
+        /* Style for the button container with description */
         .button-container {
             position: relative;
             display: inline-block;
         }
 
+        /* Style for the description that appears on hover */
         .description {
             display: none;
             width: 100px;
@@ -56,14 +67,16 @@
             bottom: calc(100% - 2px); /* Position above the button */
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
             border-radius: 5px;
         }
 
+        /* Show the description on hover */
         .button-container:hover .description {
             display: block;
         }
 
+        /* Style for the purple buttons */
         .button_purple {
             padding: 10px;
             cursor: pointer;
@@ -75,6 +88,7 @@
             border-radius: 5px;
         }
 
+        /* Style for the gray buttons */
         .button_gray {
             padding: 10px;
             cursor: pointer;
@@ -85,12 +99,13 @@
             border-radius: 5px;
         }
 
+        /* Style for paragraphs */
         p {
             margin: 0;
             padding: 0;
         }
 
-        /* Popup container */
+        /* Style for the popup container */
         .popup {
             display: none;
             position: fixed;
@@ -104,7 +119,7 @@
             z-index: 9999;
         }
 
-        /* Text on top of the popup */
+        /* Style for the text inside the popup */
         .popup-text {
             font-size: 20px;
             font-weight: bold;
@@ -112,135 +127,144 @@
     </style>
 </head>
 <body>
-<div class="top-bar">
-    <h1>Process Resource</h1>
-    <button class="button_gray" onclick="location.href='/index?command=load current'">Back to map</button>
-</div>
-
-<div class="container">
-    <div class="box-1">
-        <form action="/inventory" method="POST">
-
-            <h2>Craft</h2>
-
-            <h3>Resources and Materials</h3>
-            <div class="button-container">
-                <button class="button_purple" type="submit" name="craft" value="Craft Planks">4x Planks</button>
-                <div class="description">
-                    <p>1x Logs</p>
-                </div>
-            </div>
-            <div class="button-container">
-                <button class="button_purple" type="submit" name="craft" value="Craft Sticks">4x Sticks</button>
-                <div class="description">
-                    <p>2x Planks</p>
-                </div>
-            </div>
-
-            <h3>Tools and Equipment</h3>
-            <div class="button-container">
-                <button class="button_purple" type="submit" name="craft" value="Craft Wooden Pickaxe Uses">10x Wooden
-                    Pickaxe Uses
-                </button>
-                <div class="description">
-                    <p>3x Planks</p>
-                    <p>2x Sticks</p>
-                </div>
-            </div>
-            <div class="button-container">
-                <button class="button_purple" type="submit" name="craft" value="Craft Wooden Axe Uses">10x Wooden Axe
-                    Uses
-                </button>
-                <div class="description">
-                    <p>3x Planks</p>
-                    <p>2x Sticks</p>
-                </div>
-            </div>
-            <br/>
-            <div class="button-container">
-                <button class="button_purple" type="submit" name="craft" value="Craft Stone Pickaxe Uses">20x Stone
-                    Pickaxe Uses
-                </button>
-                <div class="description">
-                    <p>3x Rocks</p>
-                    <p>2x Sticks</p>
-                </div>
-            </div>
-            <div class="button-container">
-                <button class="button_purple" type="submit" name="craft" value="Craft Stone Axe Uses">20x Stone Axe
-                    Uses
-                </button>
-                <div class="description">
-                    <p>3x Rocks</p>
-                    <p>2x Sticks</p>
-                </div>
-            </div>
-
-            <h3>Weapons and Armor</h3>
-            <div class="button-container">
-                <button class="button_purple">NONE</button>
-                <div class="description">
-                    <p>NONE</p>
-                </div>
-            </div>
-
-            <h3>Foods and Drinks</h3>
-            <div class="button-container">
-                <button class="button_purple">NONE</button>
-                <div class="description">
-                    <p>NONE</p>
-                </div>
-            </div>
-
-            <h3>Medical Supplies</h3>
-            <div class="button-container">
-                <button class="button_purple">NONE</button>
-                <div class="description">
-                    <p>NONE</p>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="box-2">
-        <h2>Items</h2>
-        <ul>
-            {% for item, amount in player_state["inventory"].items() %}
-                <li>
-                    {{ amount }}x
-                    {% if item.endswith("_amount") %}
-                        {{ item[:-7].replace('_', ' ') }}
-                    {% else %}
-                        {{ item.replace('_', ' ') }}
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
-{% if message == "" and fail_message == "" %}
-{% elif message == "" %}
-    <div id="popup" class="popup" style="background-color: #ed4337">
-        <div class="popup-text">{{ fail_message }}</div>
+    <!-- Top bar containing the title and a back button -->
+    <div class="top-bar">
+        <h1>Process Resource</h1>
+        <button class="button_gray" onclick="location.href='/index?command=load current'">Back to map</button>
     </div>
 
-{% elif fail_message == "" %}
-    <div id="popup" class="popup" style="background-color: #02b875">
-        <div class="popup-text">{{ message }}</div>
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Box 1: Crafting section -->
+        <div class="box-1">
+            <form action="/inventory" method="POST">
+                <h2>Craft</h2>
+
+                <!-- Section for Resources and Materials -->
+                <h3>Resources and Materials</h3>
+                <div class="button-container">
+                    <button class="button_purple" type="submit" name="craft" value="Craft Planks">4x Planks</button>
+                    <div class="description">
+                        <p>1x Logs</p>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="button_purple" type="submit" name="craft" value="Craft Sticks">4x Sticks</button>
+                    <div class="description">
+                        <p>2x Planks</p>
+                    </div>
+                </div>
+
+                <!-- Section for Tools and Equipment -->
+                <h3>Tools and Equipment</h3>
+                <div class="button-container">
+                    <button class="button_purple" type="submit" name="craft" value="Craft Wooden Pickaxe Uses">10x Wooden
+                        Pickaxe Uses
+                    </button>
+                    <div class="description">
+                        <p>3x Planks</p>
+                        <p>2x Sticks</p>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="button_purple" type="submit" name="craft" value="Craft Wooden Axe Uses">10x Wooden Axe
+                        Uses
+                    </button>
+                    <div class="description">
+                        <p>3x Planks</p>
+                        <p>2x Sticks</p>
+                    </div>
+                </div>
+                <br/>
+                <div class="button-container">
+                    <button class="button_purple" type="submit" name="craft" value="Craft Stone Pickaxe Uses">20x Stone
+                        Pickaxe Uses
+                    </button>
+                    <div class="description">
+                        <p>3x Rocks</p>
+                        <p>2x Sticks</p>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="button_purple" type="submit" name="craft" value="Craft Stone Axe Uses">20x Stone Axe
+                        Uses
+                    </button>
+                    <div class="description">
+                        <p>3x Rocks</p>
+                        <p>2x Sticks</p>
+                    </div>
+                </div>
+
+                <!-- Placeholder sections for future features -->
+                <h3>Weapons and Armor</h3>
+                <div class="button-container">
+                    <button class="button_purple">NONE</button>
+                    <div class="description">
+                        <p>NONE</p>
+                    </div>
+                </div>
+
+                <h3>Foods and Drinks</h3>
+                <div class="button-container">
+                    <button class="button_purple">NONE</button>
+                    <div class="description">
+                        <p>NONE</p>
+                    </div>
+                </div>
+
+                <h3>Medical Supplies</h3>
+                <div class="button-container">
+                    <button class="button_purple">NONE</button>
+                    <div class="description">
+                        <p>NONE</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Box 2: Items section -->
+        <div class="box-2">
+            <h2>Items</h2>
+            <ul>
+                <!-- Loop to display items dynamically -->
+                {% for item, amount in player_state["inventory"].items() %}
+                    <li>
+                        {{ amount }}x
+                        {% if item.endswith("_amount") %}
+                            {{ item[:-7].replace('_', ' ') }}
+                        {% else %}
+                            {{ item.replace('_', ' ') }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-{% endif %}
 
-<script>
-    // Function to show the popup for 3 seconds
-    function showPopup() {
-        const popup = document.getElementById("popup");
-        popup.style.display = "block";
-        setTimeout(function () {
-            popup.style.display = "none";
-        }, 3000); // 3 seconds
-    }
+    <!-- Conditional popup messages based on messages received -->
+    {% if message == "" and fail_message == "" %}
+    {% elif message == "" %}
+        <div id="popup" class="popup" style="background-color: #ed4337">
+            <div class="popup-text">{{ fail_message }}</div>
+        </div>
+    {% elif fail_message == "" %}
+        <div id="popup" class="popup" style="background-color: #02b875">
+            <div class="popup-text">{{ message }}</div>
+        </div>
+    {% endif %}
 
-    // Call the function to show the popup
-    showPopup();
-</script>
+    <script>
+        // Function to show the popup for 3 seconds
+        function showPopup() {
+            const popup = document.getElementById("popup");
+            popup.style.display = "block";
+            setTimeout(function () {
+                popup.style.display = "none";
+            }, 3000); // 3 seconds
+        }
+
+        // Call the function to show the popup
+        showPopup();
+    </script>
 </body>
 </html>
